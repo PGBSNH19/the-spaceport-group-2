@@ -8,15 +8,14 @@ namespace SpacePark.Library.Context
 {
     public class SpaceParkContext : DbContext
     {
-        public DbSet<ParkingLot> PlarkingLots { get; set; }
-        public DbSet<Receipt> Receipts { get; set; }
         public DbSet<SpacePort> SpacePorts { get; set; }
-        public DbSet<Spaceship> Spaceships { get; set; }
+        public DbSet<ParkingLot> PlarkingLots { get; set; }
         public DbSet<Visitor> Visitors { get; set; }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Database=SpaceParkDB;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-GO4PDLN;Database=SpaceParkDB;Trusted_Connection=True;");
         }
     }
 }

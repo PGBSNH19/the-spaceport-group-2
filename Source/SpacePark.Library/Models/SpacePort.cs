@@ -15,5 +15,7 @@ namespace SpacePark.Library.Models
         public int SpacePortID { get; set; }
         public int ParkingSpace { get; set; }
         public PortStatus Status { get; set; }
+
+        public List<ParkingLot> ParkingLots { get; set; }
     }
 }

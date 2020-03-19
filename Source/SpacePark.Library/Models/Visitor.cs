@@ -15,6 +15,5 @@ namespace SpacePark.Library.Models
         public int VisitorID { get; set; }
         public string Name { get; set; }
         public HasPaid Status { get; set; }
-        
     }
 }
