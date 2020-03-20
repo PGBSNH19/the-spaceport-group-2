@@ -21,6 +21,7 @@ namespace SpacePark.Library.Models
 
         public SpacePort(string Name,int SpacePortID, int ParkingSpace, PortStatus Status)
         {
+            this.Name = Name;
             this.SpacePortID = SpacePortID;
             this.ParkingSpace = ParkingSpace;
             this.Status = Status;
