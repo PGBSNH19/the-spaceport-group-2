@@ -17,5 +17,17 @@ namespace SpacePark.Library.Models
         public PortStatus Status { get; set; }
 
         public List<ParkingLot> ParkingLots { get; set; }
+<<<<<<< Updated upstream
+=======
+
+        public SpacePort(string Name,int SpacePortID, int ParkingSpace, PortStatus Status)
+        {
+            this.Name = Name;
+            this.SpacePortID = SpacePortID;
+            this.ParkingSpace = ParkingSpace;
+            this.Status = Status;
+        }
+
+>>>>>>> Stashed changes
     }
 }
