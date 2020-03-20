@@ -26,7 +26,7 @@ namespace SpacePark
 
                 foreach (var v in visitorArray.VisitorResult)
                 {
-                    if (v.Name.ToLower().Contains(visitorName))
+                    if (v.Name.ToLower().Contains(visitorName.ToLower()))
                     {
                         var theVisitor = visitorArray.VisitorResult[0];
                         Console.WriteLine(theVisitor.Name);
