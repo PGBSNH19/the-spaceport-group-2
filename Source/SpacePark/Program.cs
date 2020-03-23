@@ -46,30 +46,38 @@ namespace SpacePark
                         var starWars = await StarwarsAPI.ProcessSpaceShips(visitorShip);
 
                         Console.WriteLine(starWars.Spaceships[0].Name);
-                      
-                            
-                            //Visitor visitor = new Visitor
-                            //{
-                            //    Name = theVisitor.Name,
-                            //    Status = HasPaid.NotPaid,
-                                
-                                
-                            //};
 
-                            //ParkingLot parkingLot = new ParkingLot
-                            //{
 
-                            //    ParkingLotOccupied = true,
-                            //    ParkingLotNO = 1
-                            //};
+                            Visitor visitor = new Visitor
+                            {
+                                Name = theVisitor.Name,
+                                Status = HasPaid.NotPaid,
+                            };
 
-                            //context.Visitors.Add(visitor);
-                            //context.SaveChanges();
 
-                            //context.PlarkingLots.Add(parkingLot);
-                            //context.SaveChanges();
+                            context.Visitors.Add(visitor);
+                            context.SaveChanges();
+                            ParkingLot parkingLot = new ParkingLot
+                            {
 
-                    }
+                                ParkingLotOccupied = true,
+                                ParkingLotNO = 1
+                            };
+
+                            context.ParkingLots.Add(parkingLot);
+                            context.SaveChanges();
+
+                            VisitorParking visitorParking = new VisitorParking
+                            {
+                                ParkingLotID = parkingLot.ParkingLotID,
+                                VisitorID = visitor.VisitorID,
+                                ParkingNO = 1
+                            };
+
+                            context.VisitorParking.Add(visitorParking);
+                            context.SaveChanges();
+
+                        }
 
                 }
             }
