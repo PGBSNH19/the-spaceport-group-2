@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SpacePark.Library.Context;
 
 namespace SpacePark.Library.Migrations
 {
     [DbContext(typeof(SpaceParkContext))]
-    partial class SpaceParkContextModelSnapshot : ModelSnapshot
+    [Migration("20200323141422_wedidsomethingnew")]
+    partial class wedidsomethingnew
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,9 +28,6 @@ namespace SpacePark.Library.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("ParkingLotNO")
-                        .HasColumnType("int");
-
                     b.Property<bool>("ParkingLotOccupied")
                         .HasColumnType("bit");
 
@@ -39,7 +38,7 @@ namespace SpacePark.Library.Migrations
 
                     b.HasIndex("SpacePortID");
 
-                    b.ToTable("ParkingLots");
+                    b.ToTable("PlarkingLots");
                 });
 
             modelBuilder.Entity("SpacePark.Library.Models.SpacePort", b =>
@@ -70,37 +69,17 @@ namespace SpacePark.Library.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ParkingLotID")
+                        .HasColumnType("int");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.HasKey("VisitorID");
 
-                    b.ToTable("Visitors");
-                });
-
-            modelBuilder.Entity("SpacePark.Library.Models.VisitorParking", b =>
-                {
-                    b.Property<int>("VisitorParkingID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ParkingLotID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ParkingNO")
-                        .HasColumnType("int");
-
-                    b.Property<int>("VisitorID")
-                        .HasColumnType("int");
-
-                    b.HasKey("VisitorParkingID");
-
                     b.HasIndex("ParkingLotID");
 
-                    b.HasIndex("VisitorID");
-
-                    b.ToTable("VisitorParking");
+                    b.ToTable("Visitors");
                 });
 
             modelBuilder.Entity("SpacePark.Library.Models.ParkingLot", b =>
@@ -110,19 +89,11 @@ namespace SpacePark.Library.Migrations
                         .HasForeignKey("SpacePortID");
                 });
 
-            modelBuilder.Entity("SpacePark.Library.Models.VisitorParking", b =>
+            modelBuilder.Entity("SpacePark.Library.Models.Visitor", b =>
                 {
-                    b.HasOne("SpacePark.Library.Models.ParkingLot", "ParkingLot")
-                        .WithMany("VisitorParking")
-                        .HasForeignKey("ParkingLotID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SpacePark.Library.Models.Visitor", "Visitor")
-                        .WithMany()
-                        .HasForeignKey("VisitorID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("SpacePark.Library.Models.ParkingLot", null)
+                        .WithMany("Visitors")
+                        .HasForeignKey("ParkingLotID");
                 });
 #pragma warning restore 612, 618
         }

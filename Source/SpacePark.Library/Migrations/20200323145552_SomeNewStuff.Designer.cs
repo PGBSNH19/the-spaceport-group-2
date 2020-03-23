@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SpacePark.Library.Context;
 
 namespace SpacePark.Library.Migrations
 {
     [DbContext(typeof(SpaceParkContext))]
-    partial class SpaceParkContextModelSnapshot : ModelSnapshot
+    [Migration("20200323145552_SomeNewStuff")]
+    partial class SomeNewStuff
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,7 +75,12 @@ namespace SpacePark.Library.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.Property<int?>("VisitorParkingID")
+                        .HasColumnType("int");
+
                     b.HasKey("VisitorID");
+
+                    b.HasIndex("VisitorParkingID");
 
                     b.ToTable("Visitors");
                 });
@@ -98,8 +105,6 @@ namespace SpacePark.Library.Migrations
 
                     b.HasIndex("ParkingLotID");
 
-                    b.HasIndex("VisitorID");
-
                     b.ToTable("VisitorParking");
                 });
 
@@ -110,17 +115,18 @@ namespace SpacePark.Library.Migrations
                         .HasForeignKey("SpacePortID");
                 });
 
+            modelBuilder.Entity("SpacePark.Library.Models.Visitor", b =>
+                {
+                    b.HasOne("SpacePark.Library.Models.VisitorParking", null)
+                        .WithMany("Visitors")
+                        .HasForeignKey("VisitorParkingID");
+                });
+
             modelBuilder.Entity("SpacePark.Library.Models.VisitorParking", b =>
                 {
-                    b.HasOne("SpacePark.Library.Models.ParkingLot", "ParkingLot")
+                    b.HasOne("SpacePark.Library.Models.ParkingLot", null)
                         .WithMany("VisitorParking")
                         .HasForeignKey("ParkingLotID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SpacePark.Library.Models.Visitor", "Visitor")
-                        .WithMany()
-                        .HasForeignKey("VisitorID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
