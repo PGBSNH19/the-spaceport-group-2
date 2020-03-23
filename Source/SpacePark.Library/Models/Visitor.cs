@@ -19,6 +19,8 @@ namespace SpacePark.Library.Models
         public string Name { get; set; }
         public HasPaid Status { get; set; }
 
+      
+
     }
 
 }

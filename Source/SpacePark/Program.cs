@@ -12,16 +12,24 @@ namespace SpacePark
         static async Task Main(string[] args)
         {
             CreateHeader();
-            SpacePort spacePort = new SpacePort("SpaceRefuel",1,20,PortStatus.Open);
+           // SpacePort spacePort = new SpacePort();
 
-            Console.WriteLine($"            Welcome to {spacePort.Name}!\n\n");
+            Console.WriteLine($"            Welcome to !\n\n");
             Console.WriteLine("Please enter your information");
             Console.WriteLine();
             Console.Write("Name: ");
             var visitorName = Console.ReadLine();
             var visitorArray = await PeopleAPI.ProcessPeople(visitorName);
 
-            if (visitorArray.VisitorResult.Length != 0)
+
+           var pSpots = new SpacePort();
+            context.SpacePorts.Add(pSpots);
+            context.SaveChanges();
+
+            while ( pSpots.ParkingLots.Count <= 5) {
+            
+
+            if (visitorArray.VisitorResult.Length != 0 || visitorArray.VisitorResult == null)
             {
 
                 foreach (var v in visitorArray.VisitorResult)
@@ -31,12 +39,36 @@ namespace SpacePark
                         var theVisitor = visitorArray.VisitorResult[0];
                         Console.WriteLine(theVisitor.Name);
                         Console.WriteLine();
+
                         Console.WriteLine();
                         Console.WriteLine($"Which ship are you flying today?");
                         var visitorShip = Console.ReadLine();
                         var starWars = await StarwarsAPI.ProcessSpaceShips(visitorShip);
 
                         Console.WriteLine(starWars.Spaceships[0].Name);
+                      
+                            
+                            //Visitor visitor = new Visitor
+                            //{
+                            //    Name = theVisitor.Name,
+                            //    Status = HasPaid.NotPaid,
+                                
+                                
+                            //};
+
+                            //ParkingLot parkingLot = new ParkingLot
+                            //{
+
+                            //    ParkingLotOccupied = true,
+                            //    ParkingLotNO = 1
+                            //};
+
+                            //context.Visitors.Add(visitor);
+                            //context.SaveChanges();
+
+                            //context.PlarkingLots.Add(parkingLot);
+                            //context.SaveChanges();
+
                     }
 
                 }
@@ -46,6 +78,8 @@ namespace SpacePark
             {
                 Console.WriteLine("I'm sorry to inform you that you do not have the required qualifications to enter our SpacePort.");
                 Console.WriteLine();
+            }
+
             }
 
         }
