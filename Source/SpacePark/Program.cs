@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using SpacePark.Library.Context;
 using SpacePark.Library.Models;
@@ -7,9 +8,6 @@ namespace SpacePark
 {
     class Program
     {
-        //static readonly SpaceParkContext context = new SpaceParkContext();
-        static readonly SpacePort spacePort;
-        
         static async Task Main(string[] args)
         {
             using var context = new SpaceParkContext();
@@ -17,39 +15,63 @@ namespace SpacePark
             CreateHeader();
 
             // Creates a brand new SpacePort Garage...We only need on to start with!
-            //SpacePort pSpots = CreateSpacePort(context);
+            //SpacePort spacePort = CreateSpacePort(context);
 
-            Console.WriteLine($"            Welcome to !\n\n");
-            Console.WriteLine("Please enter your information");
-            Console.WriteLine();
-            Console.Write("Name: ");
-            var visitorName = Console.ReadLine();
-            var visitorArray = await PeopleAPI.ProcessPeople(visitorName);
-            
-            // Adding visitor to DB
-            var theVisitor = visitorArray.VisitorResult[0];
-            Visitor visitor = new Visitor
-            {
-                Name = theVisitor.Name,
-                Status = HasPaid.NotPaid
-            };
-            context.Visitors.Add(visitor);
-            context.SaveChanges();
 
-            // Occupying a single parkinglot/space
-            var parkingspace = new ParkingLot
-            {
-                ParkingLotOccupied = true
-            };
-            context.ParkingLots.Add(parkingspace);
-            context.SaveChanges();
+            var availableSpaces = context.ParkingLots.ToList();
 
-            // Bringing it together in VisitorParking to keep track of who parked where
-            var visitorParking = new VisitorParking
+            foreach (var item in availableSpaces)
             {
-                VisitorID = visitor.VisitorID,
-                ParkingLotID = parkingspace.ParkingLotID
-            };
+                Console.WriteLine(item.ParkingLotID);
+            }
+
+
+            while (availableSpaces.Count <= 5)
+            {
+                availableSpaces = context.ParkingLots.ToList();
+
+                Console.WriteLine($"Available spaces: { availableSpaces.Count }");
+                Console.WriteLine($"            Welcome to !\n\n");
+                Console.WriteLine("Please enter your information");
+                Console.WriteLine();
+                Console.Write("Name: ");
+                var visitorName = Console.ReadLine();
+                var visitorArray = await PeopleAPI.ProcessPeople(visitorName);
+
+                // Adding visitor to DB
+                var theVisitor = visitorArray.VisitorResult[0];
+                Visitor visitor = new Visitor
+                {
+                    Name = theVisitor.Name,
+                    Status = HasPaid.NotPaid
+                };
+                context.Visitors.Add(visitor);
+                context.SaveChanges();
+
+                // Occupying a single parkinglot/space
+                var parkingspace = new ParkingLot
+                {
+                    ParkingLotOccupied = true
+                };
+                context.ParkingLots.Add(parkingspace);
+                context.SaveChanges();
+
+                // Bringing it together in VisitorParking to keep track of who parked where
+                var visitorParking = new VisitorParking
+                {
+                    VisitorID = visitor.VisitorID,
+                    ParkingLotID = parkingspace.ParkingLotID
+                };
+                context.VisitorParking.Add(visitorParking);
+                context.SaveChanges();
+
+                Console.WriteLine($"Available spaces: { availableSpaces.Count }");
+
+            }
+            Console.WriteLine($"Available spaces: { availableSpaces.Count }");
+
+
+
 
 
 
@@ -130,7 +152,7 @@ namespace SpacePark
             var pSpots = new SpacePort
             {
                 ParkingSpace = 5,
-                Status = PortStatus.Closed
+                Status = PortStatus.Open
             };
             context.SpacePorts.Add(pSpots);
             context.SaveChanges();
