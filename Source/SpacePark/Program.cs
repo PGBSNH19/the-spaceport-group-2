@@ -38,8 +38,22 @@ namespace SpacePark
                 else
                 {
                     Console.Clear();
-                    Console.WriteLine("Paying");
+                    await ClearParkingSpace(context);
                 }
+            }
+        }
+
+        private static async Task ClearParkingSpace(SpaceParkContext context)
+        {
+            Console.Write("Name: ");
+            var visitorName = Console.ReadLine();
+
+            var visitor = context.Visitors
+                .Select(n => n.Name);
+
+            if (visitor.FirstOrDefault() == visitorName)
+            {
+                Console.WriteLine("Work maybe!");
             }
         }
 
