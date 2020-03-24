@@ -18,19 +18,25 @@ namespace SpacePark
             //SpacePort spacePort = CreateSpacePort(context);
 
 
-            var availableSpaces = context.ParkingLots.ToList();
+            //var availableSpaces = context.ParkingLots.ToList();
 
-            foreach (var item in availableSpaces)
+            //foreach (var item in availableSpaces)
+            //{
+            //    Console.WriteLine(item.ParkingLotID);
+            //}
+
+            //var spaces = context.ParkingLots
+            //    .Where(p => p.ParkingLotOccupied == false);
+
+            var spaces = context.SpacePorts
+                .Where(p => p.SpacePortID == 1)
+                .Select(s => s.ParkingSpace).ToList();
+
+            var availableSpaces = spaces[0];
+
+            while (availableSpaces > 0)
             {
-                Console.WriteLine(item.ParkingLotID);
-            }
-
-
-            while (availableSpaces.Count <= 5)
-            {
-                availableSpaces = context.ParkingLots.ToList();
-
-                Console.WriteLine($"Available spaces: { availableSpaces.Count }");
+                Console.WriteLine($"Available spaces: { availableSpaces }");
                 Console.WriteLine($"            Welcome to !\n\n");
                 Console.WriteLine("Please enter your information");
                 Console.WriteLine();
@@ -65,10 +71,9 @@ namespace SpacePark
                 context.VisitorParking.Add(visitorParking);
                 context.SaveChanges();
 
-                Console.WriteLine($"Available spaces: { availableSpaces.Count }");
-
+                availableSpaces -= 1;
             }
-            Console.WriteLine($"Available spaces: { availableSpaces.Count }");
+            Console.WriteLine($"Available spaces: { availableSpaces }");
 
 
 
