@@ -47,14 +47,6 @@ namespace SpacePark
         {
             Console.Write("Name: ");
             var visitorName = Console.ReadLine();
-
-            var visitor = context.Visitors
-                .Select(n => n.Name);
-
-            if (visitor.FirstOrDefault() == visitorName)
-            {
-                Console.WriteLine("Work maybe!");
-            }
         }
 
         private static async Task RentParkingSpace(SpaceParkContext context)
