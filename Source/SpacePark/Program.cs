@@ -17,6 +17,11 @@ namespace SpacePark
             // Creates a brand new SpacePort Garage...We only need on to start with!
             //SpacePort spacePort = CreateSpacePort(context);
 
+            await DisplayMenu(context);
+        }
+
+        private static async Task DisplayMenu(SpaceParkContext context)
+        {
             while (true)
             {
                 Console.WriteLine("Press 1 to park: ");
@@ -60,31 +65,42 @@ namespace SpacePark
                         var visitorArray = await PeopleAPI.ProcessPeople(visitorName);
 
                         // Adding visitor to DB
-                        var theVisitor = visitorArray.VisitorResult[0];
-                        Visitor visitor = new Visitor
-                        {
-                            Name = theVisitor.Name,
-                            Status = HasPaid.NotPaid
-                        };
-                        context.Visitors.Add(visitor);
-                        context.SaveChanges();
-
-                        // Bringing it together in VisitorParking to keep track of who parked where
-                        var visitorParking = new VisitorParking
-                        {
-                            VisitorID = visitor.VisitorID,
-                            ParkingLotID = parkingSpace.ParkingLotID
-                        };
+                        Visitor visitor = AddVisitorToDB(context, visitorArray);
 
                         // Changing parking space to occupado!
                         parkingSpace.ParkingLotOccupied = true;
 
-                        context.VisitorParking.Add(visitorParking);
-                        context.SaveChanges();
+                        // Bringing it together in VisitorParking to keep track of who parked where
+                        UpdateVisitorParking(context, parkingSpace, visitor);
+
                         break;
                     }
                 }
             }
+        }
+
+        private static void UpdateVisitorParking(SpaceParkContext context, ParkingLot parkingSpace, Visitor visitor)
+        {
+            var visitorParking = new VisitorParking
+            {
+                VisitorID = visitor.VisitorID,
+                ParkingLotID = parkingSpace.ParkingLotID
+            };
+            context.VisitorParking.Add(visitorParking);
+            context.SaveChanges();
+        }
+
+        private static Visitor AddVisitorToDB(SpaceParkContext context, VisitorArray visitorArray)
+        {
+            var theVisitor = visitorArray.VisitorResult[0];
+            Visitor visitor = new Visitor
+            {
+                Name = theVisitor.Name,
+                Status = HasPaid.NotPaid
+            };
+            context.Visitors.Add(visitor);
+            context.SaveChanges();
+            return visitor;
         }
 
         private static SpacePort CreateSpacePort(SpaceParkContext context)
