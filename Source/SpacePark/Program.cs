@@ -36,21 +36,13 @@ namespace SpacePark
             }
         }
 
-        private static async Task VacateParkingSpace(SpaceParkContext context)
-        {
-            Console.WriteLine("Enter your ");
-            Console.WriteLine();
-            Console.Write("Name: ");
-            var visitorName = Console.ReadLine();
-        }
-
         private static async Task RentParkingSpace(SpaceParkContext context)
         {
             var parkingSpaces = context.ParkingLots.ToList();
 
             foreach (var parkingSpace in parkingSpaces)
             {
-                while (parkingSpace.ParkingLotOccupied == false)
+                if (parkingSpace.ParkingLotOccupied == false)
                 {
                     Console.WriteLine($"            Welcome to !\n\n");
                     Console.WriteLine("Please enter your information");
@@ -81,6 +73,7 @@ namespace SpacePark
 
                     context.VisitorParking.Add(visitorParking);
                     context.SaveChanges();
+                    break;
                 }
             }
         }
