@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using SpacePark.Library.Context;
 using SpacePark.Library.Models;
@@ -11,6 +12,9 @@ namespace SpacePark
         
         static async Task Main(string[] args)
         {
+
+           
+
             CreateHeader();
            // SpacePort spacePort = new SpacePort();
 
@@ -21,10 +25,30 @@ namespace SpacePark
             var visitorName = Console.ReadLine();
             var visitorArray = await PeopleAPI.ProcessPeople(visitorName);
 
+            //Creates spaceport, adds into DB IF no spaceport exists
+            SpacePort pSpots = SpacePort.CreateSpacePort(context);
 
-           var pSpots = new SpacePort();
-            context.SpacePorts.Add(pSpots);
-            context.SaveChanges();
+            //rec checks if there is rows in parkinglots table, if not it creates the correct amount of parkinglots
+            var rec = context.ParkingLots.FirstOrDefault();
+
+            if (rec == null)
+            {
+
+                for (int i = 0; i < pSpots.ParkingSpace; i++)
+                {
+                    ParkingLot parking = new ParkingLot
+                    {
+                        ParkingLotOccupied = false,
+                        SpacePortID = pSpots.SpacePortID
+                        
+                    };
+
+                    context.ParkingLots.Add(parking);
+                    context.SaveChanges();
+                }
+
+            }
+
 
             while ( pSpots.ParkingLots.Count <= 5) {
             
@@ -48,34 +72,28 @@ namespace SpacePark
                         Console.WriteLine(starWars.Spaceships[0].Name);
 
 
-                            Visitor visitor = new Visitor
-                            {
-                                Name = theVisitor.Name,
-                                Status = HasPaid.NotPaid,
-                            };
+                            //Visitor visitor = new Visitor
+                            //{
+                            //    Name = theVisitor.Name,
+                            //    Status = HasPaid.NotPaid,
+                            //};
 
 
-                            context.Visitors.Add(visitor);
-                            context.SaveChanges();
-                            ParkingLot parkingLot = new ParkingLot
-                            {
+                            //context.Visitors.Add(visitor);
+                            //context.SaveChanges();
+                           
 
-                                ParkingLotOccupied = true,
-                                ParkingLotNO = 1
-                            };
+                           
 
-                            context.ParkingLots.Add(parkingLot);
-                            context.SaveChanges();
+                            //VisitorParking visitorParking = new VisitorParking
+                            //{
+                            //    //ParkingLotID = parkingLot.ParkingLotID,
+                            //    VisitorID = visitor.VisitorID
+                               
+                            //};
 
-                            VisitorParking visitorParking = new VisitorParking
-                            {
-                                ParkingLotID = parkingLot.ParkingLotID,
-                                VisitorID = visitor.VisitorID,
-                                ParkingNO = 1
-                            };
-
-                            context.VisitorParking.Add(visitorParking);
-                            context.SaveChanges();
+                            //context.VisitorParking.Add(visitorParking);
+                            //context.SaveChanges();
 
                         }
 

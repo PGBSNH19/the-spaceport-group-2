@@ -17,7 +17,7 @@ namespace SpacePark.Library.Models
         public int ParkingLotID { get; set; }
         public ParkingLot ParkingLot { get; set; }
         public int VisitorID { get; set; }
-        public int ParkingNO { get; set; }
+        //public int ParkingNO { get; set; }
         public Visitor Visitor { get; set; }
 
        // public ICollection<Visitor> Visitors { get; set; }
