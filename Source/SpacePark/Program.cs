@@ -7,10 +7,12 @@ namespace SpacePark
 {
     class Program
     {
-        static readonly SpaceParkContext context = new SpaceParkContext();
+        //static readonly SpaceParkContext context = new SpaceParkContext();
         
         static async Task Main(string[] args)
         {
+            using var context = new SpaceParkContext();
+
             CreateHeader();
            // SpacePort spacePort = new SpacePort();
 
@@ -22,30 +24,29 @@ namespace SpacePark
             var visitorArray = await PeopleAPI.ProcessPeople(visitorName);
 
 
-           var pSpots = new SpacePort();
+            var pSpots = new SpacePort();
             context.SpacePorts.Add(pSpots);
             context.SaveChanges();
 
-            while ( pSpots.ParkingLots.Count <= 5) {
-            
-
-            if (visitorArray.VisitorResult.Length != 0 || visitorArray.VisitorResult == null)
+            while (pSpots.ParkingLots.Count <= 5) 
             {
-
-                foreach (var v in visitorArray.VisitorResult)
+                if (visitorArray.VisitorResult.Length != 0 || visitorArray.VisitorResult == null)
                 {
-                    if (v.Name.ToLower().Contains(visitorName.ToLower()))
+
+                    foreach (var v in visitorArray.VisitorResult)
                     {
-                        var theVisitor = visitorArray.VisitorResult[0];
-                        Console.WriteLine(theVisitor.Name);
-                        Console.WriteLine();
+                        if (v.Name.ToLower().Contains(visitorName.ToLower()))
+                        {
+                            var theVisitor = visitorArray.VisitorResult[0];
+                            Console.WriteLine(theVisitor.Name);
+                            Console.WriteLine();
 
-                        Console.WriteLine();
-                        Console.WriteLine($"Which ship are you flying today?");
-                        var visitorShip = Console.ReadLine();
-                        var starWars = await StarwarsAPI.ProcessSpaceShips(visitorShip);
+                            Console.WriteLine();
+                            Console.WriteLine($"Which ship are you flying today?");
+                            var visitorShip = Console.ReadLine();
+                            var starWars = await StarwarsAPI.ProcessSpaceShips(visitorShip);
 
-                        Console.WriteLine(starWars.Spaceships[0].Name);
+                            Console.WriteLine(starWars.Spaceships[0].Name);
 
 
                             Visitor visitor = new Visitor
@@ -79,14 +80,13 @@ namespace SpacePark
 
                         }
 
+                    }
                 }
-            }
-
-            else
-            {
-                Console.WriteLine("I'm sorry to inform you that you do not have the required qualifications to enter our SpacePort.");
-                Console.WriteLine();
-            }
+                else
+                {
+                    Console.WriteLine("I'm sorry to inform you that you do not have the required qualifications to enter our SpacePort.");
+                    Console.WriteLine();
+                }
 
             }
 
@@ -113,14 +113,6 @@ namespace SpacePark
             {
                 Console.WriteLine(line);
             }
-
-
-
-
         }
-
-
-
-
     } 
 }
