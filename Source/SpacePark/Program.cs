@@ -72,28 +72,52 @@ namespace SpacePark
                         Console.WriteLine(starWars.Spaceships[0].Name);
 
 
-                            //Visitor visitor = new Visitor
-                            //{
-                            //    Name = theVisitor.Name,
-                            //    Status = HasPaid.NotPaid,
-                            //};
+                            Visitor visitor = new Visitor
+                            {
+                                Name = theVisitor.Name,
+                                Status = HasPaid.NotPaid,
+                            };
+
+                            context.Visitors.Add(visitor);
+                            context.SaveChanges();
 
 
-                            //context.Visitors.Add(visitor);
-                            //context.SaveChanges();
+                            var parkings = context.ParkingLots.ToArray();
+
+                            foreach(var parking in parkings)
+                            {
+                                if (parking.ParkingLotOccupied != true)
+                                {
+                                    VisitorParking visitorParking = new VisitorParking
+                                    {
+                                        ParkingLotID = parking.ParkingLotID,
+                                        VisitorID = visitor.VisitorID
+
+                                    };
+
+                                    var change = context.ParkingLots.Where(p => p.ParkingLotID == parking.ParkingLotID).ToList();
+
+                                    foreach (var c in change)
+                                    {
+                                        c.ParkingLotOccupied = true;
+                                        context.SaveChanges();
+                                    };
+
+                                    context.VisitorParking.Add(visitorParking);
+                                    context.SaveChanges();
+                                    break;
+                                    
+                                }
+                                else if(parking.ParkingLotOccupied == true) 
+                                { 
+
+                                }
+                                
+                                
+                            }
                            
 
-                           
-
-                            //VisitorParking visitorParking = new VisitorParking
-                            //{
-                            //    //ParkingLotID = parkingLot.ParkingLotID,
-                            //    VisitorID = visitor.VisitorID
-                               
-                            //};
-
-                            //context.VisitorParking.Add(visitorParking);
-                            //context.SaveChanges();
+                            
 
                         }
 
