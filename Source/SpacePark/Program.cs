@@ -21,9 +21,11 @@ namespace SpacePark
             {
                 Console.WriteLine("Press 1 to park: ");
                 Console.WriteLine("Press 2 to pay: ");
-                var userChouice = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine();
+                Console.Write(">>> ");
+                var userChoice = Convert.ToInt32(Console.ReadLine());
 
-                if (userChouice == 1)
+                if (userChoice == 1)
                 {
                     Console.Clear();
                     await RentParkingSpace(context);
@@ -40,40 +42,47 @@ namespace SpacePark
         {
             var parkingSpaces = context.ParkingLots.ToList();
 
-            foreach (var parkingSpace in parkingSpaces)
+            if (parkingSpaces.Count == 5)
             {
-                if (parkingSpace.ParkingLotOccupied == false)
+                Console.WriteLine("No room, try again later!");
+            }
+            else
+            {
+                foreach (var parkingSpace in parkingSpaces)
                 {
-                    Console.WriteLine($"            Welcome to !\n\n");
-                    Console.WriteLine("Please enter your information");
-                    Console.WriteLine();
-                    Console.Write("Name: ");
-                    var visitorName = Console.ReadLine();
-                    var visitorArray = await PeopleAPI.ProcessPeople(visitorName);
-
-                    // Adding visitor to DB
-                    var theVisitor = visitorArray.VisitorResult[0];
-                    Visitor visitor = new Visitor
+                    if (parkingSpace.ParkingLotOccupied == false)
                     {
-                        Name = theVisitor.Name,
-                        Status = HasPaid.NotPaid
-                    };
-                    context.Visitors.Add(visitor);
-                    context.SaveChanges();
+                        Console.WriteLine($"            Welcome to !\n\n");
+                        Console.WriteLine("Please enter your information");
+                        Console.WriteLine();
+                        Console.Write("Name: ");
+                        var visitorName = Console.ReadLine();
+                        var visitorArray = await PeopleAPI.ProcessPeople(visitorName);
 
-                    // Bringing it together in VisitorParking to keep track of who parked where
-                    var visitorParking = new VisitorParking
-                    {
-                        VisitorID = visitor.VisitorID,
-                        ParkingLotID = parkingSpace.ParkingLotID
-                    };
+                        // Adding visitor to DB
+                        var theVisitor = visitorArray.VisitorResult[0];
+                        Visitor visitor = new Visitor
+                        {
+                            Name = theVisitor.Name,
+                            Status = HasPaid.NotPaid
+                        };
+                        context.Visitors.Add(visitor);
+                        context.SaveChanges();
 
-                    // Changing parking space to occupado!
-                    parkingSpace.ParkingLotOccupied = true;
+                        // Bringing it together in VisitorParking to keep track of who parked where
+                        var visitorParking = new VisitorParking
+                        {
+                            VisitorID = visitor.VisitorID,
+                            ParkingLotID = parkingSpace.ParkingLotID
+                        };
 
-                    context.VisitorParking.Add(visitorParking);
-                    context.SaveChanges();
-                    break;
+                        // Changing parking space to occupado!
+                        parkingSpace.ParkingLotOccupied = true;
+
+                        context.VisitorParking.Add(visitorParking);
+                        context.SaveChanges();
+                        break;
+                    }
                 }
             }
         }
