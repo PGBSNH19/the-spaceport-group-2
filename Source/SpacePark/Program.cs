@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,6 +11,8 @@ namespace SpacePark
 {
     class Program
     {
+       static List<ParkingLot> occupiedSpaces; 
+
         static async Task Main(string[] args)
         {
            
@@ -50,15 +53,14 @@ namespace SpacePark
         }
 
         private static async Task ClearParkingSpace(SpaceParkContext context)
-        {
-
-            
+        {            
+            //Not yet implemented!
             Console.Write("Name: ");
             var visitorName = Console.ReadLine();
             Console.WriteLine(visitorName);
 
-            var visitors = context.Visitors.Where(v => v.HasPaid == false).ToList();
-
+            var visitors = context.Visitors.Where(v => v.HasPaid == false).ToList();           
+          
             foreach (var v in visitors)
             {
                 if(visitorName == v.Name)
@@ -66,6 +68,19 @@ namespace SpacePark
                     v.HasPaid = true;
                     
                     context.SaveChanges();
+
+                    var visitorParking = context.VisitorParking.Where(c => c.VisitorID == v.VisitorID).ToList();
+                    
+                    foreach (var p in occupiedSpaces)
+                    {
+
+                       if(p.ParkingLotID == visitorParking[0].ParkingLotID)
+                        {
+                            p.ParkingLotOccupied = false;
+                            context.SaveChanges();
+                        }
+
+                    }
                 }
             }
         }
@@ -74,7 +89,7 @@ namespace SpacePark
         {
             var parkingSpaces = context.ParkingLots.ToList();
 
-            var occupiedSpaces = context.ParkingLots.Where(p => p.ParkingLotOccupied == true).ToList();
+           occupiedSpaces = context.ParkingLots.Where(p => p.ParkingLotOccupied == true).ToList();
 
             if (occupiedSpaces.Count == 5)
             {
