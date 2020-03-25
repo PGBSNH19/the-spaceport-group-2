@@ -12,8 +12,6 @@ namespace SpacePark
     {
         static async Task Main(string[] args)
         {
-           
-           
             using var context = new SpaceParkContext();
 
             // Creates a brand new SpacePort Garage if we do not have one already
@@ -51,9 +49,6 @@ namespace SpacePark
 
         private static async Task ClearParkingSpace(SpaceParkContext context)
         {
-
-            
-
             // Not yet implemented!
             Console.Write("Name: ");
             var visitorName = Console.ReadLine();
