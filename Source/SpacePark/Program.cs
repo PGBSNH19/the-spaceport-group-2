@@ -54,19 +54,26 @@ namespace SpacePark
 
         private static async Task ClearParkingSpace(SpaceParkContext context)
         {            
-            //Not yet implemented!
+            
             Console.Write("Name: ");
             var visitorName = Console.ReadLine();
             Console.WriteLine(visitorName);
 
-            var visitors = context.Visitors.Where(v => v.HasPaid == false).ToList();           
-          
+            ///// ///////
+            var visitors = context.Visitors.Where(v => v.HasPaid == false).ToList();
+
+            Visitor visitorToPay = new Visitor
+            {
+                Name = visitorName,
+                HasPaid = true
+            };
+
             foreach (var v in visitors)
             {
-                if(visitorName == v.Name)
-                {
-                    v.HasPaid = true;
-                    
+               
+                if (visitorName == v.Name)
+                {                                     
+                    visitorToPay.HasPaid = true;                    
                     context.SaveChanges();
 
                     var visitorParking = context.VisitorParking.Where(c => c.VisitorID == v.VisitorID).ToList();
@@ -75,10 +82,10 @@ namespace SpacePark
                     {
 
                        if(p.ParkingLotID == visitorParking[0].ParkingLotID)
-                        {
+                       {
                             p.ParkingLotOccupied = false;
                             context.SaveChanges();
-                        }
+                       }
 
                     }
                 }
@@ -136,7 +143,7 @@ namespace SpacePark
                     ParkingLot parking = new ParkingLot
                     {
                         ParkingLotOccupied = false,
-                        ParkingLotID = spacePort.SpacePortID
+                        SpacePortID = spacePort.SpacePortID
                     };
 
                     context.ParkingLots.Add(parking);

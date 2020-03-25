@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SpacePark.Library.Context;
 
 namespace SpacePark.Library.Migrations
 {
     [DbContext(typeof(SpaceParkContext))]
-    partial class SpaceParkContextModelSnapshot : ModelSnapshot
+    [Migration("20200325152314_EditedProperty")]
+    partial class EditedProperty
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -99,7 +101,7 @@ namespace SpacePark.Library.Migrations
             modelBuilder.Entity("SpacePark.Library.Models.ParkingLot", b =>
                 {
                     b.HasOne("SpacePark.Library.Models.SpacePort", "SpacePort")
-                        .WithMany()
+                        .WithMany("ParkingLots")
                         .HasForeignKey("SpacePortID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
