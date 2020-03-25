@@ -9,21 +9,12 @@ namespace SpacePark
     class Program
     {
         static readonly SpaceParkContext context = new SpaceParkContext();
-        
+
         static async Task Main(string[] args)
         {
 
-           
-
             CreateHeader();
-           // SpacePort spacePort = new SpacePort();
-
-            Console.WriteLine($"            Welcome to !\n\n");
-            Console.WriteLine("Please enter your information");
-            Console.WriteLine();
-            Console.Write("Name: ");
-            var visitorName = Console.ReadLine();
-            var visitorArray = await PeopleAPI.ProcessPeople(visitorName);
+            // SpacePort spacePort = new SpacePort();           
 
             //Creates spaceport, adds into DB IF no spaceport exists
             SpacePort pSpots = SpacePort.CreateSpacePort(context);
@@ -40,7 +31,7 @@ namespace SpacePark
                     {
                         ParkingLotOccupied = false,
                         SpacePortID = pSpots.SpacePortID
-                        
+
                     };
 
                     context.ParkingLots.Add(parking);
@@ -50,26 +41,32 @@ namespace SpacePark
             }
 
 
-            while ( pSpots.ParkingLots.Count <= 5) {
-            
-
-            if (visitorArray.VisitorResult.Length != 0 || visitorArray.VisitorResult == null)
+            while (pSpots.ParkingLots.Count <= 5)
             {
+                Console.WriteLine($"            Welcome to !\n\n");
+                Console.WriteLine("Please enter your information");
+                Console.WriteLine();
+                Console.Write("Name: ");
+                var visitorName = Console.ReadLine();
+                var visitorArray = await PeopleAPI.ProcessPeople(visitorName);
 
-                foreach (var v in visitorArray.VisitorResult)
+                if (visitorArray.VisitorResult.Length != 0 || visitorArray.VisitorResult == null)
                 {
-                    if (v.Name.ToLower().Contains(visitorName.ToLower()))
+
+                    foreach (var v in visitorArray.VisitorResult)
                     {
-                        var theVisitor = visitorArray.VisitorResult[0];
-                        Console.WriteLine(theVisitor.Name);
-                        Console.WriteLine();
+                        if (v.Name.ToLower().Contains(visitorName.ToLower()))
+                        {
+                            var theVisitor = visitorArray.VisitorResult[0];
+                            Console.WriteLine(theVisitor.Name);
+                            Console.WriteLine();
 
-                        Console.WriteLine();
-                        Console.WriteLine($"Which ship are you flying today?");
-                        var visitorShip = Console.ReadLine();
-                        var starWars = await StarwarsAPI.ProcessSpaceShips(visitorShip);
+                            Console.WriteLine();
+                            Console.WriteLine($"Which ship are you flying today?");
+                            var visitorShip = Console.ReadLine();
+                            var starWars = await StarwarsAPI.ProcessSpaceShips(visitorShip);
 
-                        Console.WriteLine(starWars.Spaceships[0].Name);
+                            Console.WriteLine(starWars.Spaceships[0].Name);
 
 
                             Visitor visitor = new Visitor
@@ -84,7 +81,7 @@ namespace SpacePark
 
                             var parkings = context.ParkingLots.ToArray();
 
-                            foreach(var parking in parkings)
+                            foreach (var parking in parkings)
                             {
                                 if (parking.ParkingLotOccupied != true)
                                 {
@@ -96,7 +93,7 @@ namespace SpacePark
                                     };
 
                                     var change = context.ParkingLots.Where(p => p.ParkingLotID == parking.ParkingLotID).ToList();
-
+                                    var change2 = context.ParkingLots.Where(p => p.ParkingLotOccupied == true).ToList();
                                     foreach (var c in change)
                                     {
                                         c.ParkingLotOccupied = true;
@@ -106,29 +103,26 @@ namespace SpacePark
                                     context.VisitorParking.Add(visitorParking);
                                     context.SaveChanges();
                                     break;
-                                    
-                                }
-                                else if(parking.ParkingLotOccupied == true) 
-                                { 
 
                                 }
-                                
-                                
+                                else if (parking.ParkingLotOccupied == true)
+                                {
+
+                                }
+
+
                             }
-                           
-
-                            
 
                         }
 
+                    }
                 }
-            }
 
-            else
-            {
-                Console.WriteLine("I'm sorry to inform you that you do not have the required qualifications to enter our SpacePort.");
-                Console.WriteLine();
-            }
+                else
+                {
+                    Console.WriteLine("I'm sorry to inform you that you do not have the required qualifications to enter our SpacePort.");
+                    Console.WriteLine();
+                }
 
             }
 
@@ -160,7 +154,6 @@ namespace SpacePark
 
 
         }
-
 
 
 
