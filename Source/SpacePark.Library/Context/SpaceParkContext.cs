@@ -1,8 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SpacePark.Library.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SpacePark.Library.Context
 {
@@ -17,7 +14,7 @@ namespace SpacePark.Library.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Data Source=IMMORTELLE\SQLEXPRESS;Database=SpaceParkDB;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-GO4PDLN;Database=SpaceParkDB;Trusted_Connection=True;");
         }
     }
 }
