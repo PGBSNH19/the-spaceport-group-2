@@ -52,20 +52,19 @@ namespace SpacePark
             // Not yet implemented!
             Console.Write("Name: ");
             var visitorName = Console.ReadLine();
+            
             Console.WriteLine(visitorName);
-
-            var visitors = context.Visitors.Where(v => v.HasPaid == false).ToList();
-
-            foreach (var v in visitors)
+            Visitor VisitorToPay = context.Visitors.Where(visitor => visitor.Name == visitorName).FirstOrDefault();
+            
+            if (VisitorToPay.HasPaid==false)
             {
-                if(visitorName == v.Name)
-                {
-                    v.HasPaid = true;
-                    
-                    context.SaveChanges();
-                }
+                VisitorToPay.HasPaid = true;
+                context.SaveChanges();
             }
-
+            else
+            {
+                Console.WriteLine("Couldn't find you in db. Or something just doesn't work");
+            }
         }
 
         private static async Task RentParkingSpace(SpaceParkContext context)
