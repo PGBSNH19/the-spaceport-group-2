@@ -53,8 +53,6 @@ namespace SpacePark
         {
 
             
-
-            // Not yet implemented!
             Console.Write("Name: ");
             var visitorName = Console.ReadLine();
             Console.WriteLine(visitorName);
@@ -70,7 +68,6 @@ namespace SpacePark
                     context.SaveChanges();
                 }
             }
-
         }
 
         private static async Task RentParkingSpace(SpaceParkContext context)
