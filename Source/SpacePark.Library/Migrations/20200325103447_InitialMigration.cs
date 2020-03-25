@@ -2,7 +2,7 @@
 
 namespace SpacePark.Library.Migrations
 {
-    public partial class SomeNewStuff : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
