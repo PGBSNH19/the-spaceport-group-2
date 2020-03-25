@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using SpacePark.Library.Models;
+using System.IO;
 
 namespace SpacePark.Library.Context
 {
@@ -12,8 +14,15 @@ namespace SpacePark.Library.Context
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer(@"Data Source=IMMORTELLE\SQLEXPRESS;Database=SpaceParkDB;Trusted_Connection=True;");
+        {           
+            IConfiguration config = new ConfigurationBuilder()
+                  .AddJsonFile("appsettings.json", true, true)
+                  .Build();
+
+           optionsBuilder.UseSqlServer(config["ConnectionStrings:DefaultConnection"]);
+            
         }
+
+       
     }
 }

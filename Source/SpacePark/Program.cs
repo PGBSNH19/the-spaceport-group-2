@@ -1,6 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using SpacePark.Library.Context;
 using SpacePark.Library.Models;
 
@@ -10,6 +12,8 @@ namespace SpacePark
     {
         static async Task Main(string[] args)
         {
+           
+           
             using var context = new SpaceParkContext();
 
             // Creates a brand new SpacePort Garage if we do not have one already
@@ -47,10 +51,26 @@ namespace SpacePark
 
         private static async Task ClearParkingSpace(SpaceParkContext context)
         {
+
+            
+
             // Not yet implemented!
             Console.Write("Name: ");
             var visitorName = Console.ReadLine();
             Console.WriteLine(visitorName);
+
+            var visitors = context.Visitors.Where(v => v.HasPaid == false).ToList();
+
+            foreach (var v in visitors)
+            {
+                if(visitorName == v.Name)
+                {
+                    v.HasPaid = true;
+                    
+                    context.SaveChanges();
+                }
+            }
+
         }
 
         private static async Task RentParkingSpace(SpaceParkContext context)
@@ -129,7 +149,7 @@ namespace SpacePark
             Visitor visitor = new Visitor
             {
                 Name = theVisitor.Name,
-                Status = HasPaid.NotPaid
+                HasPaid = false
             };
             context.Visitors.Add(visitor);
             context.SaveChanges();

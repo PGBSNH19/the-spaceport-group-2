@@ -27,7 +27,7 @@ namespace SpacePark.Library.Migrations
                     VisitorID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(nullable: true),
-                    Status = table.Column<int>(nullable: false)
+                    HasPaid = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {

@@ -10,7 +10,7 @@ using SpacePark.Library.Context;
 namespace SpacePark.Library.Migrations
 {
     [DbContext(typeof(SpaceParkContext))]
-    [Migration("20200325130118_InitialMigration")]
+    [Migration("20200325140109_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -66,11 +66,11 @@ namespace SpacePark.Library.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool>("HasPaid")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
 
                     b.HasKey("VisitorID");
 
