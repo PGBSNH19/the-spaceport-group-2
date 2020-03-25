@@ -9,10 +9,7 @@ namespace SpacePark.Library.Models
 {
     public class PeopleAPI
     {
-
         private static readonly HttpClient client = new HttpClient();
-
-        
 
         public static async Task<VisitorArray> ProcessPeople(string name)
         {

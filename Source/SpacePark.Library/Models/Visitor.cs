@@ -14,12 +14,9 @@ namespace SpacePark.Library.Models
     public class Visitor
     {      
         public int VisitorID { get; set; }
-
         [JsonPropertyName("name")]
         public string Name { get; set; }
         public HasPaid Status { get; set; }
-
-      
 
     }
 

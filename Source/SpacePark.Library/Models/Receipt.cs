@@ -8,8 +8,6 @@ namespace SpacePark.Library.Models
     {
         public int ReceiptID { get; set; }
         public int SpaceCredit { get; set; }
-        public int VisitorID { get; set; }
-        public Visitor Visitor { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime TimestampDateOfPayment { get; set; }
     }
 } 

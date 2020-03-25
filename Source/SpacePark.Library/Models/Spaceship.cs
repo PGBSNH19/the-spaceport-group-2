@@ -11,9 +11,9 @@ namespace SpacePark.Library.Models
     {
         [JsonPropertyName("name")]
         public string Name { get; set; }
-        public int VisitorID { get; set; }
         public Visitor Visitor { get; set; }
-        public ParkingLot ParkingLot { get; set;}
-        public int ParkingLotID { get; set; }
+        public int VisitorID { get; set; }
+        public Parking Parking { get; set;}
+        public int ParkingID { get; set; }
     }
 }

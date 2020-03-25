@@ -12,19 +12,15 @@ namespace SpacePark.Library.Models
         Open,
         Closed
     }
-
+                // This is the whole parkingLot
     public class SpacePort
     {
         [NotMapped]
         public string Name { get; set; } //William Added
-
         public int SpacePortID { get; set; }
-        public int ParkingSpace { get; set; }
+        public int ParkingSpace { get; set; } // Amount of Parkings
         public PortStatus Status { get; set; }
-
-
-        public List<ParkingLot> ParkingLots { get; set; } = new List<ParkingLot>();
-
+        public List<Parking> Parkings { get; set; } = new List<Parking>();
 
         public static SpacePort CreateSpacePort(SpaceParkContext context)
         {
@@ -44,21 +40,5 @@ namespace SpacePark.Library.Models
 
             return pSpots;
         }
-
-
-        //public List<ParkingLot> ParkingLots { get; set; }
-
-        //public SpacePort(string Name, int SpacePortID, int ParkingSpace, PortStatus Status)
-        //{
-        //    this.ParkingLots = ParkingLots;
-        //    this.Name = Name;
-        //    this.SpacePortID = SpacePortID;
-        //    this.ParkingSpace = ParkingSpace;
-        //    this.Status = Status;
-        //}
-
-
-
-
     }
 }

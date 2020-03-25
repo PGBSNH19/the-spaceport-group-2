@@ -55,9 +55,9 @@ namespace SpacePark
 
         private static async Task RentParkingSpace(SpaceParkContext context)
         {
-            var parkingSpaces = context.ParkingLots.ToList();
+            var parkingSpaces = context.Parkings.ToList();
 
-            var occupiedSpaces = context.ParkingLots.Where(p => p.ParkingLotOccupied == true).ToList();
+            var occupiedSpaces = context.Parkings.Where(p => p.ParkingOccupied == true).ToList();
 
             if (occupiedSpaces.Count == 5)
             {
@@ -68,7 +68,7 @@ namespace SpacePark
                 foreach (var parkingSpace in parkingSpaces)
                 {
                     Console.Clear();
-                    if (parkingSpace.ParkingLotOccupied == false)
+                    if (parkingSpace.ParkingOccupied == false)
                     {
                         Console.WriteLine($"            Welcome to !\n\n");
                         Console.WriteLine("Please enter your information");
@@ -81,7 +81,7 @@ namespace SpacePark
                         Visitor visitor = AddVisitorToDB(context, visitorArray);
 
                         // Changing parking space to occupado!
-                        parkingSpace.ParkingLotOccupied = true;
+                        parkingSpace.ParkingOccupied = true;
 
                         // Bringing it together in VisitorParking to keep track of who parked where
                         UpdateVisitorParking(context, parkingSpace, visitor);
@@ -94,30 +94,30 @@ namespace SpacePark
 
         private static void CheckParkingSpaces(SpaceParkContext context, SpacePort spacePort)
         {
-            var rec = context.ParkingLots.FirstOrDefault();
+            var rec = context.Parkings.FirstOrDefault();
 
             if (rec == null)
             {
                 for (int i = 0; i < spacePort.ParkingSpace; i++)
                 {
-                    ParkingLot parking = new ParkingLot
+                    Parking parking = new Parking
                     {
-                        ParkingLotOccupied = false,
-                        ParkingLotID = spacePort.SpacePortID
+                        ParkingOccupied = false,
+                        ParkingID = spacePort.SpacePortID
                     };
 
-                    context.ParkingLots.Add(parking);
+                    context.Parkings.Add(parking);
                     context.SaveChanges();
                 }
             }
         }
 
-        private static void UpdateVisitorParking(SpaceParkContext context, ParkingLot parkingSpace, Visitor visitor)
+        private static void UpdateVisitorParking(SpaceParkContext context, Parking parkingSpace, Visitor visitor)
         {
             var visitorParking = new VisitorParking
             {
                 VisitorID = visitor.VisitorID,
-                ParkingLotID = parkingSpace.ParkingLotID
+                ParkingID = parkingSpace.ParkingID
             };
             context.VisitorParking.Add(visitorParking);
             context.SaveChanges();
