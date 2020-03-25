@@ -12,10 +12,12 @@ namespace SpacePark
         {
             using var context = new SpaceParkContext();
 
-            CreateHeader();
+            // Creates a brand new SpacePort Garage if we do not have one already
+            SpacePort spacePort = CreateSpacePort(context);
 
-            // Creates a brand new SpacePort Garage...We only need on to start with!
-            //SpacePort spacePort = CreateSpacePort(context);
+            CheckParkingSpaces(context, spacePort);
+
+            CreateHeader();
 
             await DisplayMenu(context);
         }
@@ -45,22 +47,27 @@ namespace SpacePark
 
         private static async Task ClearParkingSpace(SpaceParkContext context)
         {
+            // Not yet implemented!
             Console.Write("Name: ");
             var visitorName = Console.ReadLine();
+            Console.WriteLine(visitorName);
         }
 
         private static async Task RentParkingSpace(SpaceParkContext context)
         {
             var parkingSpaces = context.ParkingLots.ToList();
 
-            if (parkingSpaces.Count == 5)
+            var occupiedSpaces = context.ParkingLots.Where(p => p.ParkingLotOccupied == true).ToList();
+
+            if (occupiedSpaces.Count == 5)
             {
-                Console.WriteLine("No room, try again later!");
+                Console.WriteLine("We full!");
             }
             else
             {
                 foreach (var parkingSpace in parkingSpaces)
                 {
+                    Console.Clear();
                     if (parkingSpace.ParkingLotOccupied == false)
                     {
                         Console.WriteLine($"            Welcome to !\n\n");
@@ -81,6 +88,26 @@ namespace SpacePark
 
                         break;
                     }
+                }
+            }
+        }
+
+        private static void CheckParkingSpaces(SpaceParkContext context, SpacePort spacePort)
+        {
+            var rec = context.ParkingLots.FirstOrDefault();
+
+            if (rec == null)
+            {
+                for (int i = 0; i < spacePort.ParkingSpace; i++)
+                {
+                    ParkingLot parking = new ParkingLot
+                    {
+                        ParkingLotOccupied = false,
+                        ParkingLotID = spacePort.SpacePortID
+                    };
+
+                    context.ParkingLots.Add(parking);
+                    context.SaveChanges();
                 }
             }
         }
@@ -111,13 +138,19 @@ namespace SpacePark
 
         private static SpacePort CreateSpacePort(SpaceParkContext context)
         {
+            var exist = context.SpacePorts.FirstOrDefault();
             var pSpots = new SpacePort
             {
                 ParkingSpace = 5,
                 Status = PortStatus.Open
             };
-            context.SpacePorts.Add(pSpots);
-            context.SaveChanges();
+
+            if (exist == null)
+            {
+                context.SpacePorts.Add(pSpots);
+                context.SaveChanges();
+            }
+
             return pSpots;
         }
 
