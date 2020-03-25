@@ -8,7 +8,7 @@ using SpacePark.Library.Models;
 
 namespace SpacePark
 {
-    class Program //test
+    class Program
     {
         static async Task Main(string[] args)
         {
