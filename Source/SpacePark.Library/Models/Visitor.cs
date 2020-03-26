@@ -18,6 +18,7 @@ namespace SpacePark.Library.Models
         public string Name { get; set; }    
         public bool HasPaid { get; set; }
 
+
         public static Visitor AddVisitorToDB(SpaceParkContext context, VisitorArray visitorArray)
         {
             var theVisitor = visitorArray.VisitorResult[0];
