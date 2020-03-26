@@ -19,7 +19,7 @@ namespace SpacePark.Library.Context
                   .AddJsonFile("appsettings.json", true, true)
                   .Build();
 
-           optionsBuilder.UseSqlServer(config["ConnectionStrings:DefaultConnection"]);
+           optionsBuilder.UseSqlServer(config["ConnectionStrings:Default"]);
             
         }
 
