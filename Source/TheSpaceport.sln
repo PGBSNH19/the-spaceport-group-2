@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpacePark", "SpacePark\Spac
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpacePark.Library", "SpacePark.Library\SpacePark.Library.csproj", "{91463151-5234-43E2-81B1-F3C637A5856B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpacePark.Tests", "SpacePark.Tests\SpacePark.Tests.csproj", "{D4B4E862-4D99-4704-A5E6-7346418273B5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{91463151-5234-43E2-81B1-F3C637A5856B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91463151-5234-43E2-81B1-F3C637A5856B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91463151-5234-43E2-81B1-F3C637A5856B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4B4E862-4D99-4704-A5E6-7346418273B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4B4E862-4D99-4704-A5E6-7346418273B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4B4E862-4D99-4704-A5E6-7346418273B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4B4E862-4D99-4704-A5E6-7346418273B5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

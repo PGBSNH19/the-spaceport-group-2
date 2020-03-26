@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SpacePark.Library.Context;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
@@ -13,5 +14,16 @@ namespace SpacePark.Library.Models
         public int VisitorID { get; set; }
         public Visitor Visitor { get; set; }
         public DateTime DateOfEntry { get; set; }
+
+        public static void AddVisitorParking(SpaceParkContext context, ParkingLot parkingSpace, Visitor visitor)
+        {
+            var visitorParking = new VisitorParking
+            {
+                VisitorID = visitor.VisitorID,
+                ParkingLotID = parkingSpace.ParkingLotID
+            };
+            context.VisitorParking.Add(visitorParking);
+            context.SaveChanges();
+        }
     }
 }

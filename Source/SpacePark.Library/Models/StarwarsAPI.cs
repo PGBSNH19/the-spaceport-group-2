@@ -10,18 +10,9 @@ namespace SpacePark.Library.Models
 {
     public class StarwarsAPI
     {
-
         public string Name { get; set; }
 
-
         private static readonly HttpClient client = new HttpClient();
-
-        //public static async Task GetSpaceShips(string Name)
-        //{
-        //    var spaceShips = await ProcessSpaceShips(Name);
-
-        //    Console.WriteLine(spaceShips);
-        //}
 
         public static async Task<SpaceShipArray> ProcessSpaceShips(string Name)
         {
@@ -30,7 +21,6 @@ namespace SpacePark.Library.Models
             
             return (await JsonSerializer.DeserializeAsync<SpaceShipArray>(await shipNames));
         }
-
     }
 
     public class SpaceShipArray

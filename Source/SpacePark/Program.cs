@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using SpacePark.Library.Context;
 using SpacePark.Library.Models;
 
@@ -60,7 +57,6 @@ namespace SpacePark
 
         private static void ClearParkingSpace(SpaceParkContext context)
         {
-            // Not yet implemented!
             Console.Write("Name: ");
             var visitorName = Console.ReadLine();
 
@@ -70,9 +66,13 @@ namespace SpacePark
             if (VisitorToPay.HasPaid == false)
             {
                 VisitorToPay.HasPaid = true;
-                VisitorParking parking = context.VisitorParking.Where(parking => parking.VisitorID == VisitorToPay.VisitorID).FirstOrDefault();
+                VisitorParking parking = context.VisitorParking
+                    .Where(parking => parking.VisitorID == VisitorToPay.VisitorID)
+                    .FirstOrDefault();
                 
-                ParkingLot parkingLot = context.ParkingLots.Where(parkingLot => parkingLot.ParkingLotID == parking.ParkingLotID).FirstOrDefault();
+                ParkingLot parkingLot = context.ParkingLots
+                    .Where(parkingLot => parkingLot.ParkingLotID == parking.ParkingLotID)
+                    .FirstOrDefault();
                 parkingLot.ParkingLotOccupied = false;
 
                 context.SaveChanges();
@@ -90,7 +90,9 @@ namespace SpacePark
         {
             var parkingSpaces = context.ParkingLots.ToList();
 
-           occupiedSpaces = context.ParkingLots.Where(p => p.ParkingLotOccupied == true).ToList();
+            occupiedSpaces = context.ParkingLots
+                .Where(p => p.ParkingLotOccupied == true)
+                .ToList();
 
             if (occupiedSpaces.Count == 5)
             {
@@ -135,7 +137,7 @@ namespace SpacePark
                             parkingSpace.ParkingLotOccupied = true;
 
                             // Bringing it together in VisitorParking to keep track of who parked where
-                            UpdateVisitorParking(context, parkingSpace, visitor);
+                            VisitorParking.AddVisitorParking(context, parkingSpace, visitor);
                         }
                         else
                         {
@@ -166,17 +168,6 @@ namespace SpacePark
                     context.SaveChanges();
                 }
             }
-        }
-
-        private static void UpdateVisitorParking(SpaceParkContext context, ParkingLot parkingSpace, Visitor visitor)
-        {
-            var visitorParking = new VisitorParking
-            {
-                VisitorID = visitor.VisitorID,
-                ParkingLotID = parkingSpace.ParkingLotID
-            };
-            context.VisitorParking.Add(visitorParking);
-            context.SaveChanges();
         }
 
         private static void CreateHeader()
