@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using SpacePark.Library.Context;
@@ -18,36 +19,43 @@ namespace SpacePark
             using var context = new SpaceParkContext();
 
             // Creates a brand new SpacePort Garage if we do not have one already
-            SpacePort spacePort = CreateSpacePort(context);
+            SpacePort spacePort = SpacePort.CreateSpacePort(context);
 
             CheckParkingSpaces(context, spacePort);
 
-            CreateHeader();
-
-            await DisplayMenu(context);
+            await Menu(context);
         }
-
-        private static async Task DisplayMenu(SpaceParkContext context)
+        private static async Task Menu(SpaceParkContext context)
         {
-            while (true)
+            var temp ="0";
+            do
             {
-                Console.WriteLine("Press 1 to park: ");
-                Console.WriteLine("Press 2 to pay: ");
-                Console.WriteLine();
-                Console.Write(">>> ");
-                var userChoice = Convert.ToInt32(Console.ReadLine());
+                CreateHeader();
+                Visitor.ShowCurrentVisitors(context);
+                Console.WriteLine("Press 1 => Park");
+                Console.WriteLine("Press 2 => Pay");
+                Console.WriteLine("Press 0 => Exit");
+                temp= Console.ReadLine();
 
-                if (userChoice == 1)
+                Console.Clear();
+                switch (temp)
                 {
-                    Console.Clear();
-                    await RentParkingSpace(context);
+                    case "1":
+                        await RentParkingSpace(context);
+                        Console.Clear();
+                        break;
+                    case "2":
+                        ClearParkingSpace(context);
+                        Console.Clear();
+                        break;
+                    case "0":
+                        Environment.Exit(0);
+                        break;
+                    default:
+                        Console.WriteLine("No valid input");
+                        break;
                 }
-                else
-                {
-                    Console.Clear();
-                    ClearParkingSpace(context);
-                }
-            }
+            } while (temp != "0");
         }
 
         private static void ClearParkingSpace(SpaceParkContext context)
@@ -68,6 +76,9 @@ namespace SpacePark
                 parkingLot.ParkingLotOccupied = false;
 
                 context.SaveChanges();
+
+                Console.WriteLine("Thank you for your stay, hope to see you soon Booyyyyyyy!");
+                Console.ReadLine();
             }
             else
             {
@@ -84,6 +95,7 @@ namespace SpacePark
             if (occupiedSpaces.Count == 5)
             {
                 Console.WriteLine("We full!");
+                Console.ReadLine();
             }
             else
             {
@@ -92,22 +104,38 @@ namespace SpacePark
                     Console.Clear();
                     if (parkingSpace.ParkingLotOccupied == false)
                     {
-                        Console.WriteLine($"            Welcome to !\n\n");
                         Console.WriteLine("Please enter your information");
                         Console.WriteLine();
                         Console.Write("Name: ");
                         var visitorName = Console.ReadLine();
                         var visitorArray = await PeopleAPI.ProcessPeople(visitorName);
+                        
+                        Console.Write("Ship: ");
+                        var shipName = Console.ReadLine();
+                        var ships = await StarwarsAPI.ProcessSpaceShips(shipName);
+                        Spaceship spaceShip = Spaceship.CreateShip(ships);
 
                         // Adding visitor to DB
-                        Visitor visitor = AddVisitorToDB(context, visitorArray);
+                        foreach (var v in visitorArray.VisitorResult)
+                        {
+                            if (v.Name.Contains(visitorName))
+                            {
+                                Visitor visitor = Visitor.AddVisitorToDB(context, visitorArray);
+                                Console.WriteLine($"Your have now parked at parking number: {parkingSpace.ParkingLotID} please remember your visitor ID : {visitor.VisitorID} SpaceShip: {spaceShip.Name}");
+                                Console.ReadLine();
 
-                        // Changing parking space to occupado!
-                        parkingSpace.ParkingLotOccupied = true;
+                                // Changing parking space to occupado!
+                                parkingSpace.ParkingLotOccupied = true;
 
-                        // Bringing it together in VisitorParking to keep track of who parked where
-                        UpdateVisitorParking(context, parkingSpace, visitor);
-
+                                // Bringing it together in VisitorParking to keep track of who parked where
+                                UpdateVisitorParking(context, parkingSpace, visitor);
+                            }
+                            else
+                            {
+                                Console.WriteLine("Try again");
+                                Console.ReadLine();
+                            }
+                        }
                         break;
                     }
                 }
@@ -145,37 +173,6 @@ namespace SpacePark
             context.SaveChanges();
         }
 
-        private static Visitor AddVisitorToDB(SpaceParkContext context, VisitorArray visitorArray)
-        {
-            var theVisitor = visitorArray.VisitorResult[0];
-            Visitor visitor = new Visitor
-            {
-                Name = theVisitor.Name,
-                HasPaid = false
-            };
-            context.Visitors.Add(visitor);
-            context.SaveChanges();
-            return visitor;
-        }
-
-        private static SpacePort CreateSpacePort(SpaceParkContext context)
-        {
-            var exist = context.SpacePorts.FirstOrDefault();
-            var pSpots = new SpacePort
-            {
-                ParkingSpace = 5,
-                Status = PortStatus.Open
-            };
-
-            if (exist == null)
-            {
-                context.SpacePorts.Add(pSpots);
-                context.SaveChanges();
-            }
-
-            return pSpots;
-        }
-
         private static void CreateHeader()
         {
             var header = new[]
@@ -196,6 +193,8 @@ namespace SpacePark
             {
                 Console.WriteLine(line);
             }
+
+            Console.WriteLine("\n\n");
         }
     } 
 }
