@@ -42,23 +42,28 @@ namespace SpacePark
                 else
                 {
                     Console.Clear();
-                    await ClearParkingSpace(context);
+                    ClearParkingSpace(context);
                 }
             }
         }
 
-        private static async Task ClearParkingSpace(SpaceParkContext context)
+        private static void ClearParkingSpace(SpaceParkContext context)
         {
             // Not yet implemented!
             Console.Write("Name: ");
             var visitorName = Console.ReadLine();
-            
+
             Console.WriteLine(visitorName);
-            Visitor VisitorToPay = context.Visitors.Where(visitor => visitor.Name == visitorName).FirstOrDefault();
-            
-            if (VisitorToPay.HasPaid==false)
+            Visitor VisitorToPay = context.Visitors.Where(visitor => visitor.Name == visitorName && visitor.HasPaid == false).FirstOrDefault();
+
+            if (VisitorToPay.HasPaid == false)
             {
                 VisitorToPay.HasPaid = true;
+                VisitorParking parking = context.VisitorParking.Where(parking => parking.VisitorID == VisitorToPay.VisitorID).FirstOrDefault();
+                
+                ParkingLot parkingLot = context.ParkingLots.Where(parkingLot => parkingLot.ParkingLotID == parking.ParkingLotID).FirstOrDefault();
+                parkingLot.ParkingLotOccupied = false;
+
                 context.SaveChanges();
             }
             else
@@ -117,7 +122,7 @@ namespace SpacePark
                     ParkingLot parking = new ParkingLot
                     {
                         ParkingLotOccupied = false,
-                        ParkingLotID = spacePort.SpacePortID
+                        SpacePortID = spacePort.SpacePortID
                     };
 
                     context.ParkingLots.Add(parking);
