@@ -8,7 +8,7 @@ namespace SpacePark.Library.Models
     {
         public int ParkingLotID { get; set; }
         public bool ParkingLotOccupied { get; set; }
-
-        public ICollection<VisitorParking> VisitorParking { get; set; }
+        public int SpacePortID { get; set; }
+        public SpacePort SpacePort { get; set; }
     }
 }

@@ -15,8 +15,6 @@ namespace SpacePark
 
         static async Task Main(string[] args)
         {
-           
-           
             using var context = new SpaceParkContext();
 
             // Creates a brand new SpacePort Garage if we do not have one already
@@ -47,41 +45,33 @@ namespace SpacePark
                 else
                 {
                     Console.Clear();
-                    await ClearParkingSpace(context);
+                    ClearParkingSpace(context);
                 }
             }
         }
 
-        private static async Task ClearParkingSpace(SpaceParkContext context)
-        {            
-            //Not yet implemented!
+        private static void ClearParkingSpace(SpaceParkContext context)
+        {
+            // Not yet implemented!
             Console.Write("Name: ");
             var visitorName = Console.ReadLine();
+
             Console.WriteLine(visitorName);
+            Visitor VisitorToPay = context.Visitors.Where(visitor => visitor.Name == visitorName && visitor.HasPaid == false).FirstOrDefault();
 
-            var visitors = context.Visitors.Where(v => v.HasPaid == false).ToList();           
-          
-            foreach (var v in visitors)
+            if (VisitorToPay.HasPaid == false)
             {
-                if(visitorName == v.Name)
-                {
-                    v.HasPaid = true;
-                    
-                    context.SaveChanges();
+                VisitorToPay.HasPaid = true;
+                VisitorParking parking = context.VisitorParking.Where(parking => parking.VisitorID == VisitorToPay.VisitorID).FirstOrDefault();
+                
+                ParkingLot parkingLot = context.ParkingLots.Where(parkingLot => parkingLot.ParkingLotID == parking.ParkingLotID).FirstOrDefault();
+                parkingLot.ParkingLotOccupied = false;
 
-                    var visitorParking = context.VisitorParking.Where(c => c.VisitorID == v.VisitorID).ToList();
-                    
-                    foreach (var p in occupiedSpaces)
-                    {
-
-                       if(p.ParkingLotID == visitorParking[0].ParkingLotID)
-                        {
-                            p.ParkingLotOccupied = false;
-                            context.SaveChanges();
-                        }
-
-                    }
-                }
+                context.SaveChanges();
+            }
+            else
+            {
+                Console.WriteLine("Couldn't find you in db. Or something just doesn't work");
             }
         }
 
@@ -135,7 +125,7 @@ namespace SpacePark
                     ParkingLot parking = new ParkingLot
                     {
                         ParkingLotOccupied = false,
-                        ParkingLotID = spacePort.SpacePortID
+                        SpacePortID = spacePort.SpacePortID
                     };
 
                     context.ParkingLots.Add(parking);
