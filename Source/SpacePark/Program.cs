@@ -62,18 +62,16 @@ namespace SpacePark
             ///// ///////
             var visitors = context.Visitors.Where(v => v.HasPaid == false).ToList();
 
-            Visitor visitorToPay = new Visitor
-            {
-                Name = visitorName,
-                HasPaid = true
-            };
 
+            
             foreach (var v in visitors)
             {
                
                 if (visitorName == v.Name)
-                {                                     
-                    visitorToPay.HasPaid = true;                    
+                {
+                    
+                  
+                    v.HasPaid = true;                    
                     context.SaveChanges();
 
                     var visitorParking = context.VisitorParking.Where(c => c.VisitorID == v.VisitorID).ToList();
