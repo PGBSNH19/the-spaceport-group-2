@@ -94,7 +94,7 @@ namespace SpacePark
 
             if (occupiedSpaces.Count == 5)
             {
-                Console.WriteLine("We full!");
+                Console.WriteLine("Max Capacity Reached!");
                 Console.ReadLine();
             }
             else
@@ -109,34 +109,40 @@ namespace SpacePark
                         Console.Write("Name: ");
                         var visitorName = Console.ReadLine();
                         var visitorArray = await PeopleAPI.ProcessPeople(visitorName);
-                        
+
+                        var checkVisitor = visitorArray.VisitorResult
+                            .Where(x => x.Name.Contains(visitorName))
+                            .FirstOrDefault();
+
                         Console.Write("Ship: ");
                         var shipName = Console.ReadLine();
                         var ships = await StarwarsAPI.ProcessSpaceShips(shipName);
-                        Spaceship spaceShip = Spaceship.CreateShip(ships);
+
+                        var checkShip = ships.Spaceships
+                            .Where(x => x.Name.Contains(shipName))
+                            .FirstOrDefault();
 
                         // Adding visitor to DB
-                        foreach (var v in visitorArray.VisitorResult)
+                        if (checkVisitor != null && !string.IsNullOrWhiteSpace(visitorName)
+                            && checkShip != null && !string.IsNullOrWhiteSpace(shipName))
                         {
-                            if (v.Name.Contains(visitorName))
-                            {
-                                Visitor visitor = Visitor.AddVisitorToDB(context, visitorArray);
-                                Console.WriteLine($"Your have now parked at parking number: {parkingSpace.ParkingLotID} please remember your visitor ID : {visitor.VisitorID} SpaceShip: {spaceShip.Name}");
-                                Console.ReadLine();
+                            Spaceship spaceShip = Spaceship.CreateShip(ships);
+                            Visitor visitor = Visitor.AddVisitorToDB(context, visitorArray);
+                            Console.WriteLine($"Your have now parked at parking number: {parkingSpace.ParkingLotID} please remember your visitor ID : {visitor.VisitorID} SpaceShip: {spaceShip.Name}");
+                            Console.ReadLine();
 
-                                // Changing parking space to occupado!
-                                parkingSpace.ParkingLotOccupied = true;
+                            // Changing parking space to occupado!
+                            parkingSpace.ParkingLotOccupied = true;
 
-                                // Bringing it together in VisitorParking to keep track of who parked where
-                                UpdateVisitorParking(context, parkingSpace, visitor);
-                            }
-                            else
-                            {
-                                Console.WriteLine("Try again");
-                                Console.ReadLine();
-                            }
+                            // Bringing it together in VisitorParking to keep track of who parked where
+                            UpdateVisitorParking(context, parkingSpace, visitor);
                         }
-                        break;
+                        else
+                        {
+                            Console.WriteLine("Try again! Security has been notified of your presence puny human pleb kekW getrekt son..!");
+                            Console.ReadLine();
+                        }
+                    break;
                     }
                 }
             }
