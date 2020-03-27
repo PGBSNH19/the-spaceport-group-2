@@ -12,7 +12,7 @@ namespace Prime.UnitTests.Services
         [Fact]
         public void CheckAnyResponseValue()
         {
-            var isAnyValue = PeopleAPI.ProcessPeople("Yoda");
+            var isAnyValue = PeopleAPI.GetStarWarsCharacters("Yoda");
 
             Assert.NotNull(isAnyValue);
         }
@@ -20,7 +20,7 @@ namespace Prime.UnitTests.Services
         [Fact]
         public void CheckThatPersonIsInSWAPI()
         {
-            var isStarwarsPerson = PeopleAPI.ProcessPeople("Yoda");
+            var isStarwarsPerson = PeopleAPI.GetStarWarsCharacters("Yoda");
 
             Assert.Equal("Yoda", isStarwarsPerson.Result.VisitorResult[0].Name);
         }
