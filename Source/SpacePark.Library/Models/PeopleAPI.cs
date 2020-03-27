@@ -1,5 +1,7 @@
-﻿using System;
+﻿using SpacePark.Library.Context;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -10,14 +12,6 @@ namespace SpacePark.Library.Models
 {
     public class PeopleAPI
     {
-
-        //[JsonPropertyName("results")]
-        //public Visitor[] VisitorResult { get; set; }
-
-        //[JsonPropertyName("results")]
-        //public Spaceship[] Spaceships { get; set; }
-
-
         private static readonly HttpClient client = new HttpClient();
 
         public static async Task<VisitorArray> GetStarWarsCharacters(string name)
@@ -36,29 +30,53 @@ namespace SpacePark.Library.Models
             return (await JsonSerializer.DeserializeAsync<Spaceship>(await shipNames));
         }
 
-
-        public static async Task<Visitor> Evaluate(string name)
+        public static Visitor EvaluateCharacter(SpaceParkContext context, VisitorArray visitorArray, string visitorName, ParkingLot currentParkingSpace)
         {
-            var StarWarsCharacter = await GetStarWarsCharacters(name);
+            var currentVisitor = visitorArray.VisitorResult
+                           .Where(x => x.Name.Contains(visitorName))
+                           .FirstOrDefault();
 
-            if (StarWarsCharacter != null)
+            if (currentVisitor != null && !string.IsNullOrWhiteSpace(visitorName))
+            {                                                                           
+                return visitorArray.VisitorResult[0];
+            }
+
+            else
             {
+                Console.WriteLine("Try again! Security has been notified of your presence puny human pleb kekW getrekt son..!");
+                Console.ReadLine();
+                
+                return null;
+            }
+        }
 
-                //return new Visitor(name, false);
-                return StarWarsCharacter.VisitorResult[0];
+        public static Spaceship EvaluateShips(SpaceParkContext context, Spaceship SpaceShipArray, string shipName, Visitor currentVisitor, ParkingLot currentParkingSpace)
+        {
+            var currentShip = SpaceShipArray.Spaceships
+                          .Where(x => x.Name.Contains(shipName))
+                          .FirstOrDefault();
+
+            if (currentShip != null && !string.IsNullOrWhiteSpace(shipName))
+            {
+                Visitor.AddVisitorToDB(context, currentVisitor);
+                // Changing parking space to occupado!
+                currentParkingSpace.ParkingLotOccupied = true;
+                // Bringing it together in VisitorParking to keep track of who parked where
+                VisitorParking.AddVisitorParking(context, currentParkingSpace, currentVisitor);
+
+                Console.WriteLine($"Your have now parked at parking number: {currentParkingSpace.ParkingLotID} please remember your visitor ID : {currentVisitor.VisitorID}");
+                Console.ReadLine();
+
+                return SpaceShipArray.Spaceships[0];
 
             }
 
             else
             {
+                Console.WriteLine("Try again! Security has been notified of your presence puny human pleb kekW getrekt son..!");
+                Console.ReadLine();
                 return null;
             }
-           
-
         }
-
-
-    }
-
-    
+    }    
 }
