@@ -12,7 +12,6 @@ namespace SpacePark.Library.Context
         public DbSet<Visitor> Visitors { get; set; }
         public DbSet<VisitorParking> VisitorParking { get; set; }
 
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {           
             IConfiguration config = new ConfigurationBuilder()
