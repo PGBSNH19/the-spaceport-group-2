@@ -20,8 +20,7 @@ namespace SpacePark.Library.Context
                   .Build();
 
            optionsBuilder.UseSqlServer(config["ConnectionStrings:DefaultConnection"]);
-
-
+            
         }
 
        

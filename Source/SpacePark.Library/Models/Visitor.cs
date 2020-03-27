@@ -19,6 +19,11 @@ namespace SpacePark.Library.Models
         public bool HasPaid { get; set; }
 
 
+        public static Visitor GetPayingVisitor(SpaceParkContext context, string visitorName)
+        {
+            return context.Visitors.Where(visitor => visitor.Name == visitorName && visitor.HasPaid == false).FirstOrDefault();
+        }
+
         public static Visitor AddVisitorToDB(SpaceParkContext context, VisitorArray visitorArray)
         {
             var theVisitor = visitorArray.VisitorResult[0];

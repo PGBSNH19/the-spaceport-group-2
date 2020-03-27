@@ -10,6 +10,7 @@ namespace SpacePark.Library.Models
 {
     public class StarwarsAPI
     {
+
         public string Name { get; set; }
 
         private static readonly HttpClient client = new HttpClient();
@@ -25,7 +26,6 @@ namespace SpacePark.Library.Models
 
     public class SpaceShipArray
     {
-        [JsonPropertyName("results")]
-        public Spaceship[] Spaceships { get; set; }
+       
     }
 }
