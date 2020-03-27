@@ -25,12 +25,12 @@ namespace Prime.UnitTests.Services
             Assert.Equal("Yoda", isStarwarsPerson.Result.VisitorResult[0].Name);
         }
 
-        [Fact]
-        public void CheckThatStarShipIsInSWAPI()
-        {
-            var isStarshipValid = StarwarsAPI.ProcessSpaceShips("Death Star");
+        //[Fact]
+        //public void CheckThatStarShipIsInSWAPI()
+        //{
+        //    var isStarshipValid = StarwarsAPI.ProcessSpaceShips("Death Star");
 
-            Assert.Equal("Death Star", isStarshipValid.Result.Spaceships[0].Name);
-        }
+        //    Assert.Equal("Death Star", isStarshipValid.Result.Spaceships[0].Name);
+        //}
     }
 }

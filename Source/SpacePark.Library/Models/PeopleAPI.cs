@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -12,19 +11,20 @@ namespace SpacePark.Library.Models
     public class PeopleAPI
     {
 
-        [JsonPropertyName("results")]
-        public PeopleAPI[] VisitorResult { get; set; }
+        //[JsonPropertyName("results")]
+        //public Visitor[] VisitorResult { get; set; }
 
-        [JsonPropertyName("results")]
-        public Spaceship[] Spaceships { get; set; }
+        //[JsonPropertyName("results")]
+        //public Spaceship[] Spaceships { get; set; }
+
 
         private static readonly HttpClient client = new HttpClient();
 
-        public static async Task<PeopleAPI> GetStarWarsCharacters(string name)
+        public static async Task<VisitorArray> GetStarWarsCharacters(string name)
         {
             var peopleNames = client.GetStreamAsync(
                 $"https://swapi.co/api/people/?search={ name }");
-            var names = await JsonSerializer.DeserializeAsync<PeopleAPI>(await peopleNames);
+            var names = await JsonSerializer.DeserializeAsync<VisitorArray>(await peopleNames);
             return names;
         }
 
@@ -37,20 +37,23 @@ namespace SpacePark.Library.Models
         }
 
 
-        public static async Visitor Evaluate(string name)
+        public static async Task<Visitor> Evaluate(string name)
         {
             var StarWarsCharacter = await GetStarWarsCharacters(name);
 
             if (StarWarsCharacter != null)
             {
-                return new Visitor(StarWarsCharacter.VisitorResult[0]
-                    .Select(visitor => visitor.Name)
-                    .FirstOrDefault());
+
+                //return new Visitor(name, false);
+                return StarWarsCharacter.VisitorResult[0];
+
             }
+
             else
             {
                 return null;
             }
+           
 
         }
 

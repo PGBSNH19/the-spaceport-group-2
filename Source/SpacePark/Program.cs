@@ -107,7 +107,7 @@ namespace SpacePark
                            .FirstOrDefault();
 
                 var shipName = ReadUserInput("Ship: ");
-                var ships = await StarwarsAPI.ProcessSpaceShips(shipName);
+                var ships = await PeopleAPI.GetStarWarsSpaceShips(shipName);
 
                 var checkShip = ships.Spaceships
                     .Where(x => x.Name.Contains(shipName))
