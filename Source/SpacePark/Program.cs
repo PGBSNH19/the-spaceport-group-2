@@ -25,14 +25,18 @@ namespace SpacePark
             string userChoice;
             do
             {
-                CreateHeader();
-                Visitor.ShowCurrentVisitors(context);
-                Console.WriteLine("Press 1 => Park");
-                Console.WriteLine("Press 2 => Pay");
-                Console.WriteLine("Press 0 => Exit");
-                userChoice = Console.ReadLine();
-
+                StandardMessaging.Logo();
+                Visitor.ShowCurrentVisitorsList(context);
+                
+                StandardMessaging.MenuChoice();
+                userChoice = StandardMessaging.OutputStringReadUserInput("=> ");
                 Console.Clear();
+
+                //Console.WriteLine("Press 1 => Park");
+                //Console.WriteLine("Press 2 => Pay");
+                //Console.WriteLine("Press 0 => Exit");
+                //userChoice = Console.ReadLine();
+
                 switch (userChoice)
                 {
                     case "1":
@@ -47,23 +51,24 @@ namespace SpacePark
                         Environment.Exit(0);
                         break;
                     default:
-                        Console.WriteLine("No valid input");
+                        StandardMessaging.NoValidInput("You can only choose from the alternatives. Try again!");
+                        //Console.WriteLine("No valid input");
                         break;
                 }
             } while (userChoice != "0");
         }
 
-        private static string ReadUserInput(string message)
-        {           
-            Console.Write(message);
-            var output = Console.ReadLine();
+        //private static string ReadUserInput(string message)
+        //{           
+        //    Console.Write(message);
+        //    var output = Console.ReadLine();
           
-            return output;
-        }
+        //    return output;
+        //}
 
         private static void UpdateVisitorAndParkingLot(SpaceParkContext context)
         {
-            var visitorName = ReadUserInput("Name: ");
+            var visitorName = StandardMessaging.OutputStringReadUserInput("Name: ");
           
             Visitor VisitorToPay = Visitor.GetPayingVisitor(context, visitorName);                               
           
@@ -78,13 +83,15 @@ namespace SpacePark
 
                 context.SaveChanges();
 
-                Console.WriteLine("Thank you for your stay, hope to see you soon Booyyyyyyy!");
+                StandardMessaging.ThankYouForYourStay();
+                //Console.WriteLine("Thank you for your stay, hope to see you soon Booyyyyyyy!");
                 Console.ReadLine();
             }
 
             else
             {
-                Console.WriteLine("Couldn't find you in db. Or something just doesn't work");
+                StandardMessaging.NoValidInput("Couldn't find you in db. Or something just doesn't work ;)");
+                //Console.WriteLine("Couldn't find you in db. Or something just doesn't work");
             }
         }
         
@@ -95,14 +102,15 @@ namespace SpacePark
             if (parkingSpaces.Count >= 1)
             {
                 var currentParkingSpace = parkingSpaces.First();
-                Console.WriteLine("Please enter your information");
+                StandardMessaging.EnterInformationBelow();
+                //Console.WriteLine("Please enter your information");
                 Console.WriteLine();
 
-                var visitorName = ReadUserInput("Name: ");
+                var visitorName = StandardMessaging.OutputStringReadUserInput("Name: ");
                 var visitorArray = await PeopleAPI.GetStarWarsCharacters(visitorName);
                 var currentVisitor = PeopleAPI.EvaluateCharacter(context, visitorArray, visitorName, currentParkingSpace);
 
-                var shipName = ReadUserInput("Ship: ");
+                var shipName = StandardMessaging.OutputStringReadUserInput("Ship: ");
                 var ships = await PeopleAPI.GetStarWarsSpaceShips(shipName);                            
                 var currentShip = PeopleAPI.EvaluateShips(context, ships, shipName, currentVisitor, currentParkingSpace);
 
@@ -117,7 +125,8 @@ namespace SpacePark
             }
             else
             {
-                Console.WriteLine("Max Capacity Reached!");
+                StandardMessaging.ParkingLotFull();
+                //Console.WriteLine("Max Capacity Reached!");
                 Console.ReadLine();
             }
         }
@@ -142,28 +151,28 @@ namespace SpacePark
             }
         }
 
-        private static void CreateHeader()
-        {
-            var header = new[]
-           {
-                    @"       ,---.                                  ,------.         ,---.               ,--.           ",
-                    @"      '   .-'  ,---.  ,--,--. ,---. ,---.     |  .--. ' ,---. /  .-',--.,--. ,---. |  |           ",
-                    @"      `.  `-. | .-. |' ,-.  || .--'| .-. :    |  '--'.'| .-. :|  `-,|  ||  || .-. :|  |           ",
-                    @"      .-'    || '-' '\ '-'  |\ `--.\   --.    |  |\  \ \   --.|  .-''  ''  '\   --.|  |           ",
-                    @"      `-----' |  |-'  `--`--' `---' `----'    `--' '--' `----'`--'   `----'  `----'`--'  .         ",
-                    @"              `--'                                                                                "
+        //private static void CreateHeader()
+        //{
+        //    var header = new[]
+        //   {
+        //            @"       ,---.                                  ,------.         ,---.               ,--.           ",
+        //            @"      '   .-'  ,---.  ,--,--. ,---. ,---.     |  .--. ' ,---. /  .-',--.,--. ,---. |  |           ",
+        //            @"      `.  `-. | .-. |' ,-.  || .--'| .-. :    |  '--'.'| .-. :|  `-,|  ||  || .-. :|  |           ",
+        //            @"      .-'    || '-' '\ '-'  |\ `--.\   --.    |  |\  \ \   --.|  .-''  ''  '\   --.|  |           ",
+        //            @"      `-----' |  |-'  `--`--' `---' `----'    `--' '--' `----'`--'   `----'  `----'`--'  .         ",
+        //            @"              `--'                                                                                "
 
-            };
+        //    };
 
-            Console.WindowWidth = 100;
-            Console.WriteLine("\n\n");
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            foreach (string line in header)
-            {
-                Console.WriteLine(line);
-            }
+        //    Console.WindowWidth = 100;
+        //    Console.WriteLine("\n\n");
+        //    Console.ForegroundColor = ConsoleColor.DarkYellow;
+        //    foreach (string line in header)
+        //    {
+        //        Console.WriteLine(line);
+        //    }
 
-            Console.WriteLine("\n\n");
-        }
+        //    Console.WriteLine("\n\n");
+        //}
     } 
 }

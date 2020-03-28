@@ -37,7 +37,7 @@ namespace SpacePark.Library.Models
            
         }
 
-        public static void ShowCurrentVisitors(SpaceParkContext context)
+        public static void ShowCurrentVisitorsList(SpaceParkContext context)
         {
             var visitors = context.Visitors.Where(visitor=> visitor.HasPaid == false).ToList();
             Console.WriteLine("Current guests");    
