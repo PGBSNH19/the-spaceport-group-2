@@ -9,8 +9,6 @@ namespace SpacePark
 {
     class Program
     {
-       static List<ParkingLot> occupiedSpaces; 
-
         static async Task Main(string[] args)
         {
             using var context = new SpaceParkContext();
@@ -24,7 +22,7 @@ namespace SpacePark
         }
         private static async Task Menu(SpaceParkContext context)
         {
-            var temp ="0";
+            string userChoice;
             do
             {
                 CreateHeader();
@@ -32,10 +30,10 @@ namespace SpacePark
                 Console.WriteLine("Press 1 => Park");
                 Console.WriteLine("Press 2 => Pay");
                 Console.WriteLine("Press 0 => Exit");
-                temp = Console.ReadLine();
+                userChoice = Console.ReadLine();
 
                 Console.Clear();
-                switch (temp)
+                switch (userChoice)
                 {
                     case "1":
                         await RentParkingSpace(context);
@@ -52,7 +50,7 @@ namespace SpacePark
                         Console.WriteLine("No valid input");
                         break;
                 }
-            } while (temp != "0");
+            } while (userChoice != "0");
         }
 
         private static string ReadUserInput(string message)
@@ -96,45 +94,26 @@ namespace SpacePark
        
             if (parkingSpaces.Count >= 1)
             {
+                var currentParkingSpace = parkingSpaces.First();
                 Console.WriteLine("Please enter your information");
                 Console.WriteLine();
 
                 var visitorName = ReadUserInput("Name: ");
                 var visitorArray = await PeopleAPI.GetStarWarsCharacters(visitorName);
-                               
-                var currentVisitor = visitorArray.VisitorResult
-                           .Where(x => x.Name.ToLower().Contains(visitorName.ToLower()))
-                           .FirstOrDefault();
+                var currentVisitor = PeopleAPI.EvaluateCharacter(context, visitorArray, visitorName, currentParkingSpace);
 
                 var shipName = ReadUserInput("Ship: ");
-                var ships = await StarwarsAPI.ProcessSpaceShips(shipName);
+                var ships = await PeopleAPI.GetStarWarsSpaceShips(shipName);                            
+                var currentShip = PeopleAPI.EvaluateShips(context, ships, shipName, currentVisitor, currentParkingSpace);
 
-                var checkShip = ships.Spaceships
-                    .Where(x => x.Name.Contains(shipName))
-                    .FirstOrDefault();
+              
 
-                var theParking = parkingSpaces.First();
-
-                // Adding visitor to DB
-                if (currentVisitor != null && !string.IsNullOrWhiteSpace(visitorName)
-                    && checkShip != null && !string.IsNullOrWhiteSpace(shipName))
-                {
-                    Spaceship spaceShip = Spaceship.CreateShip(ships);
-                    Visitor visitor = Visitor.AddVisitorToDB(context, visitorArray);
-                    Console.WriteLine($"Your have now parked at parking number: {theParking.ParkingLotID} please remember your visitor ID : {visitor.VisitorID} SpaceShip: {spaceShip.Name}");
-                    Console.ReadLine();
-
-                    // Changing parking space to occupado!
-                    theParking.ParkingLotOccupied = true;
-
-                    // Bringing it together in VisitorParking to keep track of who parked where
-                    VisitorParking.AddVisitorParking(context, theParking, visitor);
-                }
-                else
-                {
-                    Console.WriteLine("Try again! Security has been notified of your presence puny human pleb kekW getrekt son..!");
-                    Console.ReadLine();
-                }                            
+                // Adding visitor to DB               
+                //Spaceship spaceShip = Spaceship.CreateShip(ships);
+               
+                // Bringing it together in VisitorParking to keep track of who parked where
+                VisitorParking.AddVisitorParking(context, currentParkingSpace, currentVisitor);
+               
             }
             else
             {
@@ -142,7 +121,7 @@ namespace SpacePark
                 Console.ReadLine();
             }
         }
-
+        
         private static void CheckParkingSpaces(SpaceParkContext context, SpacePort spacePort)
         {
             var rec = context.ParkingLots.FirstOrDefault();
