@@ -1,8 +1,4 @@
-﻿using SpacePark.Library.Context;
-using SpacePark.Library.Models;
-using SpacePark;
-using System.Linq;
-using System;
+﻿using SpacePark.Library.Models;
 using Xunit;
 
 namespace Prime.UnitTests.Services
@@ -24,13 +20,5 @@ namespace Prime.UnitTests.Services
 
             Assert.Equal("Yoda", isStarwarsPerson.Result.VisitorResult[0].Name);
         }
-
-        //[Fact]
-        //public void CheckThatStarShipIsInSWAPI()
-        //{
-        //    var isStarshipValid = StarwarsAPI.ProcessSpaceShips("Death Star");
-
-        //    Assert.Equal("Death Star", isStarshipValid.Result.Spaceships[0].Name);
-        //}
     }
 }
