@@ -17,7 +17,7 @@ namespace SpacePark.Library.Models
             
             SpaceCredit = 500;
             this.Visitor = Visitor;
-            this.Date = DateTime.Now;
+            Date = DateTime.Now;
         }
 
         public static void GetReceipt(Visitor Visitor)

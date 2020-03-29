@@ -32,7 +32,8 @@ namespace SpacePark.Library.Models
             var visitorParking = new VisitorParking
             {
                 VisitorID = visitor.VisitorID,
-                ParkingLotID = parkingSpace.ParkingLotID
+                ParkingLotID = parkingSpace.ParkingLotID,
+                DateOfEntry = DateTime.Now
             };
             context.VisitorParking.Add(visitorParking);
             context.SaveChanges();

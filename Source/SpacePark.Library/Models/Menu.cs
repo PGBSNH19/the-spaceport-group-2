@@ -8,7 +8,6 @@ namespace SpacePark.Library.Models
 {
     public static class Menu
     {
-
         public static void GenerateProgram(SpaceParkContext context)
         {
             string userChoice;
