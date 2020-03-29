@@ -22,7 +22,5 @@ namespace SpacePark.Library.Context
            optionsBuilder.UseSqlServer(config["ConnectionStrings:DefaultConnection"]);
             
         }
-
-       
     }
 }
