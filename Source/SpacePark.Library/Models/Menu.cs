@@ -52,6 +52,7 @@ namespace SpacePark.Library.Models
 
             Visitor VisitorToPay = Visitor.GetPayingVisitor(context, visitorName);
 
+            Receipt.GetReceipt(VisitorToPay);
             Visitor.ChangePaymentStatus(context, VisitorToPay);
         }
 
@@ -66,27 +67,36 @@ namespace SpacePark.Library.Models
                 Console.WriteLine();
 
                 var visitorName = StandardMessaging.OutputStringReadUserInput("Name: ");
-                var visitor = DataAPI.EvaluateCharacter(visitorName);
-
-                if (visitor != null)
+                if (visitorName != null && !string.IsNullOrWhiteSpace(visitorName))
                 {
-                    var shipName = StandardMessaging.OutputStringReadUserInput("Ship: ");
-                    var ship = DataAPI.EvaluateShips(shipName);
-
-                    if (ship != null)
+                    var visitor = DataAPI.EvaluateCharacter(visitorName);
+                    if (visitor != null)
                     {
-                        Visitor.AddVisitorToDB(context, visitor);
-                        currentParkingSpace.ParkingLotOccupied = true;
-                        VisitorParking.AddVisitorParking(context, currentParkingSpace, visitor);
+                        var shipName = StandardMessaging.OutputStringReadUserInput("Ship: ");
+                        var ship = DataAPI.EvaluateShips(shipName);
+
+                        if (ship != null)
+                        {
+                            Visitor.AddVisitorToDB(context, visitor);
+                            currentParkingSpace.ParkingLotOccupied = true;
+                            VisitorParking.AddVisitorParking(context, currentParkingSpace, visitor);
+                        }
+                        else
+                        {
+                            Console.WriteLine("VisitorName correct, but something wrong with shipName");
+                            Console.ReadKey();
+                        }
                     }
                     else
                     {
-                        Console.WriteLine("VisitorName correct, but something wrong with shipName");
+                        Console.WriteLine("VisitorName Wrong");
+                        Console.ReadKey();
                     }
                 }
                 else
                 {
                     Console.WriteLine("VisitorName Wrong");
+                    Console.ReadKey();
                 }
             }
             else

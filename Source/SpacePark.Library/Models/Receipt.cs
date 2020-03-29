@@ -11,5 +11,19 @@ namespace SpacePark.Library.Models
         public int VisitorID { get; set; }
         public Visitor Visitor { get; set; }
         public DateTime Date { get; set; }
+
+        public Receipt(Visitor Visitor)
+        {
+            
+            SpaceCredit = 500;
+            this.Visitor = Visitor;
+            this.Date = DateTime.Now;
+        }
+
+        public static void GetReceipt(Visitor Visitor)
+        {
+            var Receipt = new Receipt(Visitor);
+            Console.WriteLine($"{Receipt.SpaceCredit} space credits\n{Receipt.Visitor.Name}\n{Receipt.Date}");
+        }
     }
 } 

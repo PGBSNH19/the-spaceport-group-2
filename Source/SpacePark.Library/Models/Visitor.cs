@@ -12,10 +12,9 @@ namespace SpacePark.Library.Models
    
     public class Visitor 
     {        
-        public int VisitorID { get; set; }
-
         [JsonPropertyName("name")]
-        public string Name { get; set; }    
+        public string Name { get; set; }
+        public int VisitorID { get; set; }
         public bool HasPaid { get; set; }
       
         public static void ChangePaymentStatus(SpaceParkContext context, Visitor VisitorToPay)
@@ -32,13 +31,11 @@ namespace SpacePark.Library.Models
                 context.SaveChanges();
 
                 StandardMessaging.ThankYouForYourStay();
-                //Console.WriteLine("Thank you for your stay, hope to see you soon Booyyyyyyy!");
                 Console.ReadLine();
             }
             else
             {
                 StandardMessaging.NoValidInput("Couldn't find you in db. Or something just doesn't work ;)");
-                //Console.WriteLine("Couldn't find you in db. Or something just doesn't work");
             }
         }
 
@@ -49,16 +46,8 @@ namespace SpacePark.Library.Models
 
         public static void AddVisitorToDB(SpaceParkContext context, Visitor visitor)
         {
-           
-            
-            //visitor = new Visitor
-            //{
-            //   Name = visitor.Name,
-            //   HasPaid = false
-            //};
             context.Visitors.Add(visitor);
             context.SaveChanges();
-           
         }
 
         public static void ShowCurrentVisitorsList(SpaceParkContext context)
@@ -71,9 +60,5 @@ namespace SpacePark.Library.Models
             }
             Console.WriteLine("\n");
         }
-
-       
-
     }
-
 }

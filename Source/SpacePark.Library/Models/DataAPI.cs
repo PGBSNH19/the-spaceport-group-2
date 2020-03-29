@@ -50,13 +50,12 @@ namespace SpacePark.Library.Models
         public static Visitor EvaluateCharacter(string visitorName)
         {
             var visitors = GetStarWarsCharacter(visitorName);
-            var visitor = visitors.Result.VisitorResult.FirstOrDefault() ;
+            var visitor = visitors.Result.VisitorResult.FirstOrDefault();
 
             if (visitor != null)
             {
                 return visitor;
             }
-
             else
             {
                 Console.WriteLine("Something went wrong when fethcing Charachters");
