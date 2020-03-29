@@ -21,27 +21,32 @@ namespace SpacePark.Library.Models
                 userChoice = StandardMessaging.OutputStringReadUserInput("=> ");
                 Console.Clear();
 
-                switch (userChoice)
-                {
-                    case "1":
-                        RentParkingSpace(context);
-                        Console.Clear();
-                        break;
-                    case "2":
-                        UpdateVisitorAndParkingLot(context);
-                        Console.Clear();
-                        break;
-                    case "0":
-                        Environment.Exit(0);
-                        break;
-                    default:
-                        StandardMessaging.NoValidInput("You can only choose from the alternatives. Try again!");
-                        break;
-                }
+                ExecuteUserChoice(context, userChoice);
             } while (userChoice != "0");
         }
 
-        public static void UpdateVisitorAndParkingLot(SpaceParkContext context)
+        private static void ExecuteUserChoice(SpaceParkContext context, string userChoice)
+        {
+            switch (userChoice)
+            {
+                case "1":
+                    RentParkingSpace(context);
+                    Console.Clear();
+                    break;
+                case "2":
+                    UpdateVisitorAndParkingLot(context);
+                    Console.Clear();
+                    break;
+                case "0":
+                    Environment.Exit(0);
+                    break;
+                default:
+                    StandardMessaging.NoValidInput("You can only choose from the alternatives. Try again!");
+                    break;
+            }
+        }
+
+        private static void UpdateVisitorAndParkingLot(SpaceParkContext context)
         {
             var visitorName = StandardMessaging.OutputStringReadUserInput("Name: ");
 
@@ -50,7 +55,7 @@ namespace SpacePark.Library.Models
             Visitor.ChangePaymentStatus(context, VisitorToPay);
         }
 
-        public static void RentParkingSpace(SpaceParkContext context)
+        private static void RentParkingSpace(SpaceParkContext context)
         {
             var parkingSpaces = context.ParkingLots.Where(p => p.ParkingLotOccupied == false).ToList();
 
@@ -77,7 +82,6 @@ namespace SpacePark.Library.Models
                     else
                     {
                         Console.WriteLine("VisitorName correct, but something wrong with shipName");
-
                     }
                 }
                 else
