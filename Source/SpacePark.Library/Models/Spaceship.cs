@@ -17,17 +17,6 @@ namespace SpacePark.Library.Models
         public ParkingLot ParkingLot { get; set;}
         public int ParkingLotID { get; set; }
 
-        //public static Spaceship CreateShip(Spaceship spaceShipArray)
-        //{
-        //    var shipsResult = spaceShipArray.Spaceships[0];
-        //    Spaceship Spaceship = new Spaceship
-        //    {
-        //        Name = shipsResult.Name
-        //    };
-
-        //    return Spaceship;
-        //}
-
         [JsonPropertyName("results")]
         public Spaceship[] Spaceships { get; set; }
     }

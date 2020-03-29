@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SpacePark.Library.Models
 {
-    public class StandardMessaging
+    public static class StandardMessaging
     {
 
         public static void Logo()

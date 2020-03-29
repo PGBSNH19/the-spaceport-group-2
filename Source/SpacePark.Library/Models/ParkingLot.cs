@@ -21,5 +21,25 @@ namespace SpacePark.Library.Models
                     .Where(parkingLot => parkingLot.ParkingLotID == parking.ParkingLotID)
                     .FirstOrDefault();                               
         }
+
+        public static void CheckParkingSpaces(SpaceParkContext context, SpacePort spacePort)
+        {
+            var rec = context.ParkingLots.FirstOrDefault();
+
+            if (rec == null)
+            {
+                for (int i = 0; i < spacePort.ParkingSpace; i++)
+                {
+                    ParkingLot parking = new ParkingLot
+                    {
+                        ParkingLotOccupied = false,
+                        SpacePortID = spacePort.SpacePortID
+                    };
+
+                    context.ParkingLots.Add(parking);
+                    context.SaveChanges();
+                }
+            }
+        }
     }
 }

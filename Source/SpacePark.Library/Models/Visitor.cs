@@ -18,6 +18,30 @@ namespace SpacePark.Library.Models
         public string Name { get; set; }    
         public bool HasPaid { get; set; }
       
+        public static void ChangePaymentStatus(SpaceParkContext context, Visitor VisitorToPay)
+        {
+            if (VisitorToPay.HasPaid == false)
+            {
+                VisitorToPay.HasPaid = true;
+
+                var parking = VisitorParking.GetSpecificVisitorParking(context, VisitorToPay);
+
+                var parkingLot = ParkingLot.GetSpecificParkingLot(context, parking);
+                parkingLot.ParkingLotOccupied = false;
+
+                context.SaveChanges();
+
+                StandardMessaging.ThankYouForYourStay();
+                //Console.WriteLine("Thank you for your stay, hope to see you soon Booyyyyyyy!");
+                Console.ReadLine();
+            }
+            else
+            {
+                StandardMessaging.NoValidInput("Couldn't find you in db. Or something just doesn't work ;)");
+                //Console.WriteLine("Couldn't find you in db. Or something just doesn't work");
+            }
+        }
+
         public static Visitor GetPayingVisitor(SpaceParkContext context, string visitorName)
         {
             return context.Visitors.Where(visitor => visitor.Name == visitorName && visitor.HasPaid == false).FirstOrDefault();
