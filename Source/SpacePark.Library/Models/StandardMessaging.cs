@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SpacePark.Library.Models
 {
@@ -41,19 +39,16 @@ namespace SpacePark.Library.Models
         public static void EnterInformationBelow()
         {
             Console.WriteLine("Please enter your information below:");
-
         }
 
         public static void ParkingLotFull()
         {
             Console.WriteLine("Max Capacity Reached!");
-
         }
 
         public static void ThankYouForYourStay()
         {
             Console.WriteLine("Thank you for your stay, hope to see you soon Booyyyyyyy!");
-
         }
 
         public static string OutputStringReadUserInput(string message)

@@ -1,9 +1,6 @@
 ﻿using SpacePark.Library.Context;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Text;
 
 namespace SpacePark.Library.Models
 {
@@ -15,10 +12,6 @@ namespace SpacePark.Library.Models
         public int VisitorID { get; set; }
         public Visitor Visitor { get; set; }
         public DateTime DateOfEntry { get; set; }
-
-
-
-        
 
         public static VisitorParking GetSpecificVisitorParking(SpaceParkContext context, Visitor visitor )
         {

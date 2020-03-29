@@ -1,11 +1,7 @@
-﻿using SpacePark.Library.Context;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace SpacePark.Library.Models
@@ -58,7 +54,7 @@ namespace SpacePark.Library.Models
             }
             else
             {
-                Console.WriteLine("Something went wrong when fethcing Charachters");
+                Console.WriteLine("This name is probably not valid");
                 Console.ReadLine();
 
                 return null;
@@ -76,7 +72,8 @@ namespace SpacePark.Library.Models
             }
             else
             {
-                Console.WriteLine("Something went wrong when fethcing spaceShip");
+                Console.WriteLine("Visitor name is valid, but shipname does not exist in Starwars API");
+                Console.ReadLine();
                 return null;
             }
         }

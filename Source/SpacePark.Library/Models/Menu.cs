@@ -1,8 +1,6 @@
 ﻿using SpacePark.Library.Context;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace SpacePark.Library.Models
 {
@@ -44,17 +42,7 @@ namespace SpacePark.Library.Models
                     break;
             }
         }
-
-        private static void UpdateVisitorAndParkingLot(SpaceParkContext context)
-        {
-            var visitorName = StandardMessaging.OutputStringReadUserInput("Name: ");
-
-            Visitor VisitorToPay = Visitor.GetPayingVisitor(context, visitorName);
-
-            Receipt.GetReceipt(VisitorToPay);
-            Visitor.ChangePaymentStatus(context, VisitorToPay);
-        }
-
+        
         private static void RentParkingSpace(SpaceParkContext context)
         {
             var parkingSpaces = context.ParkingLots.Where(p => p.ParkingLotOccupied == false).ToList();
@@ -80,22 +68,7 @@ namespace SpacePark.Library.Models
                             currentParkingSpace.ParkingLotOccupied = true;
                             VisitorParking.AddVisitorParking(context, currentParkingSpace, visitor);
                         }
-                        else
-                        {
-                            Console.WriteLine("VisitorName correct, but something wrong with shipName");
-                            Console.ReadKey();
-                        }
                     }
-                    else
-                    {
-                        Console.WriteLine("VisitorName Wrong");
-                        Console.ReadKey();
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("VisitorName Wrong");
-                    Console.ReadKey();
                 }
             }
             else
@@ -103,6 +76,15 @@ namespace SpacePark.Library.Models
                 StandardMessaging.ParkingLotFull();
                 Console.ReadLine();
             }
+        }
+
+        private static void UpdateVisitorAndParkingLot(SpaceParkContext context)
+        {
+            var visitorName = StandardMessaging.OutputStringReadUserInput("Name: ");
+
+            Visitor VisitorToPay = Visitor.GetPayingVisitor(context, visitorName);
+            Receipt.GetReceipt(VisitorToPay);
+            Visitor.ChangePaymentStatus(context, VisitorToPay);
         }
     }
 }
