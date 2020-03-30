@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
+﻿using SpacePark.Library.Context;
+using System;
+using System.Linq;
 
 namespace SpacePark.Library.Models
 {
-    public enum IsOccupied
-    {
-        Occupied,
-        NotOccupied
-    }
-
     public class VisitorParking
     {
         public int VisitorParkingID { get; set; }
@@ -18,13 +11,25 @@ namespace SpacePark.Library.Models
         public ParkingLot ParkingLot { get; set; }
         public int VisitorID { get; set; }
         public Visitor Visitor { get; set; }
+        public DateTime DateOfEntry { get; set; }
 
-       // public ICollection<Visitor> Visitors { get; set; }
-       
+        public static VisitorParking GetSpecificVisitorParking(SpaceParkContext context, Visitor visitor )
+        {
+                return context.VisitorParking
+                    .Where(parking => parking.VisitorID == visitor.VisitorID)
+                    .FirstOrDefault();
+        }
 
-
-        [NotMapped]
-        public IsOccupied Status { get; set; }
-
+        public static void AddVisitorParking(SpaceParkContext context, ParkingLot parkingSpace, Visitor visitor)
+        {
+            var visitorParking = new VisitorParking
+            {
+                VisitorID = visitor.VisitorID,
+                ParkingLotID = parkingSpace.ParkingLotID,
+                DateOfEntry = DateTime.Now
+            };
+            context.VisitorParking.Add(visitorParking);
+            context.SaveChanges();
+        }
     }
 }

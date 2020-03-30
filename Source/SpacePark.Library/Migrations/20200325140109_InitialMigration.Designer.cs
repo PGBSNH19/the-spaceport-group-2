@@ -10,8 +10,8 @@ using SpacePark.Library.Context;
 namespace SpacePark.Library.Migrations
 {
     [DbContext(typeof(SpaceParkContext))]
-    [Migration("20200323141758_wedidsomethingnewagain")]
-    partial class wedidsomethingnewagain
+    [Migration("20200325140109_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -34,16 +34,11 @@ namespace SpacePark.Library.Migrations
                     b.Property<int?>("SpacePortID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("VisitorID")
-                        .HasColumnType("int");
-
                     b.HasKey("ParkingLotID");
 
                     b.HasIndex("SpacePortID");
 
-                    b.HasIndex("VisitorID");
-
-                    b.ToTable("PlarkingLots");
+                    b.ToTable("ParkingLots");
                 });
 
             modelBuilder.Entity("SpacePark.Library.Models.SpacePort", b =>
@@ -71,15 +66,37 @@ namespace SpacePark.Library.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool>("HasPaid")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
 
                     b.HasKey("VisitorID");
 
                     b.ToTable("Visitors");
+                });
+
+            modelBuilder.Entity("SpacePark.Library.Models.VisitorParking", b =>
+                {
+                    b.Property<int>("VisitorParkingID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ParkingLotID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VisitorID")
+                        .HasColumnType("int");
+
+                    b.HasKey("VisitorParkingID");
+
+                    b.HasIndex("ParkingLotID");
+
+                    b.HasIndex("VisitorID");
+
+                    b.ToTable("VisitorParking");
                 });
 
             modelBuilder.Entity("SpacePark.Library.Models.ParkingLot", b =>
@@ -87,10 +104,21 @@ namespace SpacePark.Library.Migrations
                     b.HasOne("SpacePark.Library.Models.SpacePort", null)
                         .WithMany("ParkingLots")
                         .HasForeignKey("SpacePortID");
+                });
 
-                    b.HasOne("SpacePark.Library.Models.Visitor", null)
-                        .WithMany("ParkingLots")
-                        .HasForeignKey("VisitorID");
+            modelBuilder.Entity("SpacePark.Library.Models.VisitorParking", b =>
+                {
+                    b.HasOne("SpacePark.Library.Models.ParkingLot", "ParkingLot")
+                        .WithMany("VisitorParking")
+                        .HasForeignKey("ParkingLotID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SpacePark.Library.Models.Visitor", "Visitor")
+                        .WithMany()
+                        .HasForeignKey("VisitorID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

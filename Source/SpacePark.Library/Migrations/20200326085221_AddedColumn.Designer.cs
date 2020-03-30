@@ -10,8 +10,8 @@ using SpacePark.Library.Context;
 namespace SpacePark.Library.Migrations
 {
     [DbContext(typeof(SpaceParkContext))]
-    [Migration("20200323150044_changed")]
-    partial class changed
+    [Migration("20200326085221_AddedColumn")]
+    partial class AddedColumn
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,13 +28,10 @@ namespace SpacePark.Library.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("ParkingLotNO")
-                        .HasColumnType("int");
-
                     b.Property<bool>("ParkingLotOccupied")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("SpacePortID")
+                    b.Property<int>("SpacePortID")
                         .HasColumnType("int");
 
                     b.HasKey("ParkingLotID");
@@ -69,11 +66,11 @@ namespace SpacePark.Library.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool>("HasPaid")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
 
                     b.HasKey("VisitorID");
 
@@ -87,10 +84,10 @@ namespace SpacePark.Library.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("ParkingLotID")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("DateOfEntry")
+                        .HasColumnType("datetime2");
 
-                    b.Property<int>("ParkingNO")
+                    b.Property<int>("ParkingLotID")
                         .HasColumnType("int");
 
                     b.Property<int>("VisitorID")
@@ -107,9 +104,11 @@ namespace SpacePark.Library.Migrations
 
             modelBuilder.Entity("SpacePark.Library.Models.ParkingLot", b =>
                 {
-                    b.HasOne("SpacePark.Library.Models.SpacePort", null)
+                    b.HasOne("SpacePark.Library.Models.SpacePort", "SpacePort")
                         .WithMany("ParkingLots")
-                        .HasForeignKey("SpacePortID");
+                        .HasForeignKey("SpacePortID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("SpacePark.Library.Models.VisitorParking", b =>

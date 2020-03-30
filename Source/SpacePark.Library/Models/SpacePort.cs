@@ -1,7 +1,7 @@
-﻿using System;
+﻿using SpacePark.Library.Context;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
+using System.Linq;
 
 namespace SpacePark.Library.Models
 {
@@ -14,27 +14,28 @@ namespace SpacePark.Library.Models
     public class SpacePort
     {
         [NotMapped]
-        public string Name { get; set; } //William Added
-
+        public string Name { get; set; } 
         public int SpacePortID { get; set; }
         public int ParkingSpace { get; set; }
         public PortStatus Status { get; set; }
+        public List<ParkingLot> ParkingLots { get; set; } = new List<ParkingLot>();
 
+        public static SpacePort CreateSpacePort(SpaceParkContext context)
+        {
+            var exist = context.SpacePorts.FirstOrDefault();
+            var pSpots = new SpacePort
+            {
+                ParkingSpace = 5,
+                Status = PortStatus.Open
+            };
 
-        public List<ParkingLot> ParkingLots { get; set; } = new List<ParkingLot>(); 
-        //public List<ParkingLot> ParkingLots { get; set; }
+            if (exist == null)
+            {
+                context.SpacePorts.Add(pSpots);
+                context.SaveChanges();
+            }
 
-        //public SpacePort(string Name, int SpacePortID, int ParkingSpace, PortStatus Status)
-        //{
-        //    this.ParkingLots = ParkingLots;
-        //    this.Name = Name;
-        //    this.SpacePortID = SpacePortID;
-        //    this.ParkingSpace = ParkingSpace;
-        //    this.Status = Status;
-        //}
-
-        
-
-        
+            return pSpots;
+        }
     }
 }
