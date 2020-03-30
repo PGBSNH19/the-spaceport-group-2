@@ -30,10 +30,9 @@ namespace SpacePark.Library.Models
                         ParkingLotOccupied = false,
                         SpacePortID = spacePort.SpacePortID
                     };
-
                     context.ParkingLots.Add(parking);
-                    context.SaveChanges();
-                }
+                }             
+                context.SaveChanges();
             }
         }
     }

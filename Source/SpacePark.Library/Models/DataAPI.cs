@@ -8,10 +8,12 @@ namespace SpacePark.Library.Models
 {
     public static class DataAPI
     {
-        private static readonly HttpClient client = new HttpClient();
+        
 
         public static async Task<VisitorArray> GetStarWarsCharacter(string visitorName)
         {
+            using HttpClient client = new HttpClient();
+
             if (visitorName.Length >=1 && !string.IsNullOrEmpty(visitorName) && !string.IsNullOrWhiteSpace(visitorName))
             {
                 var peopleNames = client.GetStreamAsync(
@@ -28,6 +30,8 @@ namespace SpacePark.Library.Models
 
         public static async Task<Spaceship> GetStarWarsSpaceShips(string Name)
         {
+            using HttpClient client = new HttpClient();
+
             if (Name.Length >=1 && !string.IsNullOrEmpty(Name) && !string.IsNullOrWhiteSpace(Name))
             {
                 var shipNames = client.GetStreamAsync(

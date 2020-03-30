@@ -16,7 +16,7 @@ namespace SpacePark.Library.Context
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {           
             IConfiguration config = new ConfigurationBuilder()
-                  .AddJsonFile("appsettings.json", true, true)
+                  .AddJsonFile("appsettings.json", true)
                   .Build();
 
            optionsBuilder.UseSqlServer(config["ConnectionStrings:DefaultConnection"]);

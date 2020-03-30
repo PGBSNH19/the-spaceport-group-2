@@ -47,35 +47,40 @@ namespace SpacePark.Library.Models
         {
             var parkingSpaces = context.ParkingLots.Where(p => p.ParkingLotOccupied == false).ToList();
 
-            if (parkingSpaces.Count >= 1)
-            {
-                var currentParkingSpace = parkingSpaces.First();
-                StandardMessaging.EnterInformationBelow();
-                Console.WriteLine();
-
-                var visitorName = StandardMessaging.OutputStringReadUserInput("Name: ");
-                if (visitorName != null && !string.IsNullOrWhiteSpace(visitorName))
-                {
-                    var visitor = DataAPI.EvaluateCharacter(visitorName);
-                    if (visitor != null)
-                    {
-                        var shipName = StandardMessaging.OutputStringReadUserInput("Ship: ");
-                        var ship = DataAPI.EvaluateShips(shipName);
-
-                        if (ship != null)
-                        {
-                            Visitor.AddVisitorToDB(context, visitor);
-                            currentParkingSpace.ParkingLotOccupied = true;
-                            VisitorParking.AddVisitorParking(context, currentParkingSpace, visitor);
-                        }
-                    }
-                }
-            }
-            else
+            if (parkingSpaces.Count < 1)
             {
                 StandardMessaging.ParkingLotFull();
                 Console.ReadLine();
+                return;
             }
+
+            var currentParkingSpace = parkingSpaces.First();
+            StandardMessaging.EnterInformationBelow();
+            Console.WriteLine();
+
+            var visitorName = StandardMessaging.OutputStringReadUserInput("Name: ");
+            if (visitorName == null || string.IsNullOrWhiteSpace(visitorName))
+            {
+                return;
+            }
+
+            var visitor = DataAPI.EvaluateCharacter(visitorName);
+            if (visitor == null)
+            {
+                return;
+            }
+
+            var shipName = StandardMessaging.OutputStringReadUserInput("Ship: ");
+            var ship = DataAPI.EvaluateShips(shipName);
+
+            if (ship == null)
+            {
+                return;
+            }
+
+            Visitor.AddVisitorToDB(context, visitor);
+            currentParkingSpace.ParkingLotOccupied = true;
+            VisitorParking.AddVisitorParking(context, currentParkingSpace, visitor);
         }
 
         private static void UpdateVisitorAndParkingLot(SpaceParkContext context)
